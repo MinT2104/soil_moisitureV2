@@ -22,22 +22,27 @@ export const AppProvider = ({ children }) => {
   const [projectchose, setProjectChose] = useState({
     projectName: "Choose Project",
   });
+  const [allSenSorValue, setAllSenSorValue] = useState([]);
+  const [allRain, setAllRain] = useState([]);
+
   // console.log(currentProject);
   const [isOpenSideBar, setIsOpenSideBar] = useState(false);
   const [reFreshChart, setReFreshChart] = useState(false);
 
   const { allProjects } = useAllProject(userRedux, loadCreation);
   useGetUser(loadUser);
-  const { allSenSorValue, newSensorChange } = useGetSenSorValue(reFreshChart);
+  // const { allSenSorValue, newSensorChange } = useGetSenSorValue(reFreshChart);
 
-  // console.log("muted");
-
+  console.log(allRain);
   return (
     <AppContext.Provider
       value={{
         setReFreshChart,
         reFreshChart,
-        newSensorChange,
+        setAllRain,
+        allRain,
+        // newSensorChange,
+        setAllSenSorValue,
         allSenSorValue,
         allProjects,
         currentProject,

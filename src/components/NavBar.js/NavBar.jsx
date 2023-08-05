@@ -19,9 +19,9 @@ const NavBar = ({ setIsChooseMapPopup }) => {
   }, [getPath]);
 
   return (
-    <div className="animate-none dark:bg-[#2a213a] dark:text-white md:flex flex-col justify-between bg-white w-[100px] h-full p-4 z-0 hidden">
+    <div className="animate-none dark:bg-[#2a213a] dark:text-white md:flex flex-col justify-between bg-white w-[300px] h-full p-4 z-0 hidden">
       <div>
-        <div className="z-0 flex flex-col gap-2 justify-center items-center my-4">
+        <div className="z-0 flex flex-col gap-2 justify-center my-4">
           <Link
             onClick={() => {
               setGetPath("/");
@@ -31,10 +31,10 @@ const NavBar = ({ setIsChooseMapPopup }) => {
                 ${
                   pathActive === "/" ? "color-Primary text-white" : "text-black"
                 }
-                w-fit dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
+                w-full dark:bg-transparent justify-start dark:text-white outline-none font-normal flex items-center gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
           >
             <LineAxisIcon sx={{ fontSize: 25 }} />
-            {/* <h1 className='text-lg'>DashBoard</h1> */}
+            <h1 className="text-sm">Overview</h1>
           </Link>
           <Link
             onClick={() => {
@@ -48,10 +48,10 @@ const NavBar = ({ setIsChooseMapPopup }) => {
                     ? "color-Primary text-white"
                     : "text-black"
                 }
-                w-fit dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
+                w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-center items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
           >
             <AddBoxIcon sx={{ fontSize: 25 }} />
-            {/* <h1 className='text-lg'>Create</h1> */}
+            <h1 className="text-sm text-center">Project Management</h1>
           </Link>
 
           <Link
@@ -65,9 +65,10 @@ const NavBar = ({ setIsChooseMapPopup }) => {
                     ? "color-Primary text-white"
                     : "text-black"
                 }
-                w-fit dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
+                w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-center gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
           >
             <MapIcon sx={{ fontSize: 25 }} />
+            <h1 className="text-sm text-center">Map Management</h1>
           </Link>
           <Link
             onClick={() => {
@@ -80,10 +81,10 @@ const NavBar = ({ setIsChooseMapPopup }) => {
                     ? "color-Primary text-white"
                     : "text-black"
                 }
-                w-fit dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
+                w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-center gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
           >
             <WaterIcon sx={{ fontSize: 25 }} />
-            {/* <h1 className='text-lg'>DashBoard</h1> */}
+            <h1 className="text-sm text-center">Rainfall Station</h1>
           </Link>
           <Link
             onClick={() => {
@@ -96,10 +97,10 @@ const NavBar = ({ setIsChooseMapPopup }) => {
                     ? "color-Primary text-white"
                     : "text-black"
                 }
-                w-fit dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
+                w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-center  gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 cursor-pointer `}
           >
             <NotificationImportantOutlinedIcon sx={{ fontSize: 25 }} />
-            {/* <h1 className='text-lg'>Notifications</h1> */}
+            <h1 className="text-sm text-center">Notifications</h1>
           </Link>
         </div>
       </div>

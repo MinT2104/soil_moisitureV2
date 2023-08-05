@@ -83,6 +83,12 @@ const AllProjects = ({
             Pumps status
           </th>
           <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            Depth level 1
+          </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+            Depth level 2
+          </th>
+          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">
             Get ID
           </th>
           <th className="px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center">
@@ -125,6 +131,20 @@ const AllProjects = ({
                 <span className="text-orange-600 bg-orange-200 p-2 rounded">
                   Inactive
                 </span>
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+              {data?.depth_level_1 ? (
+                data?.depth_level_1
+              ) : (
+                <span className="text-red-500">_ _</span>
+              )}
+            </td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+              {data?.depth_level_2 ? (
+                data?.depth_level_2
+              ) : (
+                <span className="text-red-500">_ _</span>
               )}
             </td>
             <td>

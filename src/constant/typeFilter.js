@@ -7,7 +7,7 @@ export const typeFilter = [
   {
     id: 2,
     type: "month",
-    name: "filter by Month",
+    name: "Filter by Month",
   },
   {
     id: 3,
@@ -18,10 +18,5 @@ export const typeFilter = [
     id: 4,
     type: "interval",
     name: "Filter by Interval",
-  },
-  {
-    id: 5,
-    type: "all",
-    name: "Get All",
   },
 ];

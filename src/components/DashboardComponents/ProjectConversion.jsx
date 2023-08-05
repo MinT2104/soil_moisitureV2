@@ -11,7 +11,7 @@ export const ProjectConversion = ({
   const dispatch = useDispatch();
 
   return (
-    <li className="h-full animate-opacity dark:bg-[#2a213a] dark:text-white w-full bg-white absolute">
+    <div className=" h-[calc(100%-60px)] animate-opacity dark:bg-[#2a213a] dark:text-white w-[300px] bg-white absolute">
       <ul>
         <li className="dark:bg-[#2a213a] px-4 p-2 font-light duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-4 items-center bg-slate-200">
           <ArrowBackIcon onClick={() => setIsProjectConversion(false)} />
@@ -28,12 +28,12 @@ export const ProjectConversion = ({
               setIsPopupProjectManagementMob(false);
               setIsProjectConversion(!isProjectConversion);
             }}
-            className="py-2 px-12 dark:hover:text-black font-light  hover:bg-slate-200 duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-2 items-center"
+            className="py-4 px-12 dark:hover:text-black font-light  hover:bg-slate-200 duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-2 items-center"
           >
             {data?.projectName}
           </li>
         ))}
       </ul>
-    </li>
+    </div>
   );
 };

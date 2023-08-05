@@ -1,4 +1,11 @@
-import React, { useEffect, memo, useState, useContext } from "react";
+import React, {
+  useEffect,
+  memo,
+  useState,
+  useContext,
+  useCallback,
+  useMemo,
+} from "react";
 import zoomPlugin from "chartjs-plugin-zoom";
 import {
   Chart as ChartJS,
@@ -16,6 +23,7 @@ import { AppContext } from "../../context/AppContext";
 import moment from "moment";
 import { findMinMax1 } from "../../utils/findMinMax";
 import { findMinMax2 } from "../../utils/findMinMax";
+import { formatDataForChart } from "../../utils/FormatDataForChart";
 
 ChartJS.register(
   CategoryScale,
@@ -29,18 +37,24 @@ ChartJS.register(
   zoomPlugin
 );
 
-const Chart = ({
-  filteredObjectCreated,
-  filteredObjectField1,
-  filteredObjectField2,
-  initialValueField2,
-  initialValueField1,
-  initialValueCreated,
-}) => {
-  const { dayObjectChosen, currentProject } = useContext(AppContext);
+const Chart = (
+  {
+    // filteredObjectCreated,
+    // filteredObjectField1,
+    // filteredObjectField2,
+    // initialValueField2,
+    // initialValueField1,
+    // initialValueCreated,
+  }
+) => {
+  const { dayObjectChosen, currentProject, allSenSorValue } =
+    useContext(AppContext);
   const w = window.innerWidth;
-  const { min1, max1 } = findMinMax1(filteredObjectField1);
-  const { min2, max2 } = findMinMax2(filteredObjectField2);
+  const { field1, field2, date } = useMemo(() => {
+    return formatDataForChart(currentProject, allSenSorValue);
+  }, [allSenSorValue]);
+  const { min1, max1 } = findMinMax1(field1);
+  const { min2, max2 } = findMinMax2(field2);
   const Max = () => {
     if (max1 < max2) return max2;
     else return max1;
@@ -49,25 +63,15 @@ const Chart = ({
     if (min1 < min2) return min1 - (3000 - Max());
     else return min2 - (3000 - Max());
   };
-  console.log(Max(), Min());
+
   //----------------------------------------------
 
   const data = {
-    labels:
-      dayObjectChosen?.type !== undefined
-        ? filteredObjectCreated
-        : initialValueCreated?.map((data) =>
-            moment(data).format(
-              w < 768 ? "DD/MM/YYY hh:mm a" : "DD/MM/YYYY hh:mm a"
-            )
-          ),
+    labels: date,
     datasets: [
       {
         label: currentProject?.depth_level_2 || "humid depth 2",
-        data:
-          dayObjectChosen?.type !== undefined
-            ? filteredObjectField2
-            : initialValueField2,
+        data: field2,
         borderColor: "#1e40af",
         backgroundColor: "blue",
         tension: 0.1,
@@ -75,10 +79,7 @@ const Chart = ({
       },
       {
         label: currentProject?.depth_level_1 || "humid depth 1",
-        data:
-          dayObjectChosen?.type !== undefined
-            ? filteredObjectField1
-            : initialValueField1,
+        data: field1,
         borderColor:
           localStorage.getItem("dark") === "true" ? "blue" : "#1D267D",
         backgroundColor:
@@ -121,7 +122,7 @@ const Chart = ({
           display: true,
           text: "mV",
         },
-        min: Min() || 1500,
+        min: Min() || 0,
         max: 3000,
         // grid: {
         //   color: "#4b5563",
@@ -137,7 +138,7 @@ const Chart = ({
           color: "#4b5563",
         },
         ticks: {
-          maxTicksLimit: 5,
+          maxTicksLimit: 3,
           stepSize: 1000,
         },
       },
@@ -146,7 +147,7 @@ const Chart = ({
   //------------------------
   return (
     <div className="z-30 relative bg-white dark:bg-[#2a213a]">
-      <Line height={w < 768 ? 300 : 100} options={options} data={data} />
+      <Line height={w < 768 ? 300 : 140} options={options} data={data} />
     </div>
   );
 };

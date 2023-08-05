@@ -40,7 +40,6 @@ export const RainFall = () => {
 
   const nameRef = useRef();
   const postFeedRef = useRef();
-
   const handleSubmit = () => {
     const objChose = {
       espName: nameRef.current?.value,

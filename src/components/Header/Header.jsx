@@ -20,11 +20,11 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import MenuIcon from "@mui/icons-material/Menu";
 import logo from "../../assets/img/logo.png";
 import { useClickOutside } from "../../hooks/useClickOutside";
+import { setCurrentProject } from "../../redux/reducer/currentProjectSlice";
 
 const Header = (props) => {
   const navigate = useNavigate();
   const dropDownRef = useRef(null);
-  const { setCurrentProject } = useContext(AppContext);
   const dispatch = useDispatch();
   const userRedux = useSelector((state) => state);
   const [isPopupUser, setIsPopupUser] = useState(false);
@@ -41,13 +41,13 @@ const Header = (props) => {
 
   const handleLogOut = () => {
     if (userRedux.user.providerId) {
+      dispatch(setCurrentProject({}));
       dispatch(logoutGoogle());
       navigate("/login");
-      setCurrentProject({});
     } else {
       dispatch(logout());
       navigate("/login");
-      setCurrentProject({});
+      dispatch(setCurrentProject({}));
     }
     setTimeout(() => {
       toast.success("Log out successfully!", {
@@ -205,8 +205,8 @@ const Header = (props) => {
             onClick={() => navigate("/")}
             className="md:flex cursor-pointer hidden text-3xl z-0 outline-none font-black flex-row rounded items-center justify-center"
           >
-            <div className="w-[45px] h-[45px] rounded-full truncate cursor">
-              <img src={logo} alt="" />
+            <div className="w-fit h-fit truncate cursor">
+              <img src={logo} className="h-5" alt="" />
             </div>
           </div>
           <div className="md:flex hidden flex-col">

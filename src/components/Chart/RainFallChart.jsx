@@ -30,58 +30,50 @@ ChartJS.register(
 );
 
 const RainFallChart = ({}) => {
-  const { currentProject } = useContext(AppContext);
+  const { currentProject, allRain } = useContext(AppContext);
   const userRedux = useSelector((state) => state);
-  const [allRain, setAllRain] = useState([]);
   const w = window.innerWidth;
 
-  useLayoutEffect(() => {
-    const getData = async () => {
-      apiProjectService
-        .post("/rain/alluserrain", {
-          uid: userRedux.user?.uid,
-        })
-        .then((res) => {
-          setAllRain(res.data);
-        })
-        .catch((err) => console.log(err));
-    };
-    getData();
-  }, [currentProject]);
+  // useLayoutEffect(() => {
+  //   const getData = async () => {
+  //     apiProjectService
+  //       .post("/rain/alluserrain", {
+  //         uid: userRedux.user?.uid,
+  //       })
+  //       .then((res) => {
+  //         setAllRain(res.data);
+  //       })
+  //       .catch((err) => console.log(err));
+  //   };
+  //   getData();
+  // }, [currentProject]);
 
-  const currentRainFallStation = allRain?.filter(
-    (data) => data?.pid === currentProject?.pid
-  );
+  // const currentRainFallStation = allRain?.filter(
+  //   (data) => data?.pid === currentProject?.pid
+  // );
   //------------------------------------------------
   const valueCreate = [];
   const valueField1 = [];
-  for (let i = 0; i < currentRainFallStation[0]?.feeds?.length; i++) {
+  allRain?.forEach((data) => {
     valueCreate.push(
-      moment(currentRainFallStation[0]?.feeds[i]?.generated_date).format(
-        w < 768 ? "DD/MM/YYY" : "DD/MM/YYYY"
-      ) +
+      moment(data?.generated_date).format("DD/MM/YYYY") +
         " " +
-        moment(currentRainFallStation[0]?.feeds[i]?.generated_time).format(
-          w < 768 ? "hh:mm a" : "hh:mm a"
-        )
+        moment(data?.generated_time).format("hh:mm a")
     );
-    if (currentRainFallStation[0]?.feeds[i]?.field1 === "NaN") {
+    if (data?.field1 === "NaN") {
       valueField1.push("0");
-    }
-    if (currentRainFallStation[0]?.feeds[i]?.field1 === "0") {
+    } else if (data?.field1 === "0") {
       valueField1.push("0");
     } else {
-      valueField1.push(
-        currentRainFallStation[0]?.feeds[i]?.field1?.replace("mm", "")
-      );
+      valueField1.push(data?.field1);
     }
-    // console.log(currentRainFallStation[0]?.feeds[i]);
-  }
-  //   console.log(valueField1);
+  });
+  console.log(valueField1);
+  console.log(valueCreate);
   //----------------------------------------------
 
   const data = {
-    labels: valueCreate.reverse(),
+    labels: valueCreate,
     // labels:
     //   dayObjectChosen.data?.start !== undefined
     //     ? filteredObjectCreated?.reverse()
@@ -95,7 +87,7 @@ const RainFallChart = ({}) => {
     datasets: [
       {
         label: "Rainfall",
-        data: valueField1.reverse(),
+        data: valueField1,
         borderColor: "blue",
         backgroundColor: "blue",
         tension: 0.1,
@@ -127,7 +119,7 @@ const RainFallChart = ({}) => {
             enabled: true,
             speed: 0.05,
           },
-          mode: "xy",
+          mode: "x",
         },
       },
     },
@@ -150,7 +142,7 @@ const RainFallChart = ({}) => {
           color: "#4b5563",
         },
         ticks: {
-          maxTicksLimit: 5,
+          maxTicksLimit: 3,
           stepSize: 1000,
         },
       },
@@ -160,7 +152,7 @@ const RainFallChart = ({}) => {
 
   return (
     <div className="z-40 relative bg-white dark:bg-[#2a213a]">
-      <Bar height={w < 768 ? 600 : 100} options={options} data={data} />
+      <Bar height={w < 768 ? 600 : 140} options={options} data={data} />
     </div>
   );
 };

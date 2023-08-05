@@ -70,9 +70,7 @@ export const RainFallDetail = ({
                 {index + 1}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                {data?.field1 !== "NaN"
-                  ? data?.field1 + data?.unit
-                  : data?.field1}
+                {data?.field1 !== "NaN" ? data?.field1 + "mm" : data?.field1}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
                 {moment(data?.generated_date).format("DD/MM/YYYY")}

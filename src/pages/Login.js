@@ -105,12 +105,14 @@ const Login = () => {
 
   const LoginPageStyle = {
     divWrapper: "w-ful h-screen loginbg flex justify-center items-center",
-    WrapperChild: "w-4/5 h-4/5 bg-white rounded-xl flex flex-row",
+    WrapperChild:
+      "w-full md:w-4/5 h-full md:h-4/5 bg-white rounded-xl flex flex-row",
     divLeft:
       "w-1/2 md:flex hidden h-full p-2 border-r-[1px] border-gray-200 justify-center items-center",
     divRight:
       "md:w-1/2 w-full h-full p-2 flex flex-col justify-center items-center ",
-    input: "w-2/3 bg-none p-2 px-4 rounded-lg border-[0.5px] outline-blue-600",
+    input:
+      "w-full bg-none p-2 px-4 border-b-[1px] outline-none hover:border-blue-500 focus:border-blue-500",
     button:
       "w-1/2 p-2 color-Primary text-white rounded-full font-semibold hover:opacity-95 hover:translate-y-1 duration-500",
   };
@@ -182,33 +184,48 @@ const Login = () => {
               Sign In
             </span>
             <div className="w-full flex justify-center items-center flex-col gap-6">
-              <input
-                style={{ borderColor: borderRed.nameBorder ? `red` : `gray` }}
-                ref={nameRef}
-                className={LoginPageStyle.input}
-                type="text"
-                placeholder="username"
-              />
-              <input
-                style={{ borderColor: borderRed.passBorder ? `red` : `gray` }}
-                ref={passRef}
-                className={LoginPageStyle.input}
-                type="password"
-                placeholder="password"
-              />
-              <button className={LoginPageStyle.button}>Sign In</button>
+              <div className="flex flex-col gap-2 w-3/4 md:w-2/3">
+                <label className="font-bold">Name</label>
+                <input
+                  style={{ borderColor: borderRed.nameBorder ? `red` : `gray` }}
+                  ref={nameRef}
+                  className={LoginPageStyle.input}
+                  type="text"
+                  placeholder="ex: minChoco1234"
+                />
+              </div>
+              <div className="flex flex-col gap-2 w-3/4 md:w-2/3">
+                <label className="font-bold">Password</label>
+                <input
+                  style={{ borderColor: borderRed.passBorder ? `red` : `gray` }}
+                  ref={passRef}
+                  className={LoginPageStyle.input}
+                  type="password"
+                  placeholder="ex: 0123456789"
+                />
+              </div>
+              <div className="w-2/3 flex justify-end">
+                <span className="text-blue-600 cursor-pointer">
+                  Forgot Password?
+                </span>
+              </div>
             </div>
 
-            <div className="flex flex-row gap-2">
-              <Link to="/register">
-                <span className="text-blue-600 cursor-pointer hover:-translate-x-2 duration-500">
-                  New account
-                </span>
+            <div className="flex flex-col items-center gap-2 justify-end w-2/3">
+              <button
+                type="submit"
+                className="flex items-center justify-center text-center bg-blue-600 w-full p-2 px-6 rounded-lg font-bold text-white cursor-pointer"
+              >
+                <span className="font-medium">Sign In</span>
+              </button>
+              <Link className="w-full" to="/register">
+                <button
+                  type="button"
+                  className="flex items-center justify-center text-center text-white w-full p-2 px-6 rounded-lg font-bold bg-red-500 cursor-pointer"
+                >
+                  <span className="font-medium">Sign Up</span>
+                </button>
               </Link>
-              <HorizontalRuleIcon sx={{ color: "blue" }} />
-              <span className="text-blue-600 cursor-pointer  hover:translate-x-2 duration-500">
-                forget Password?
-              </span>
             </div>
           </div>
         </div>

@@ -30,9 +30,12 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { TableData } from "../components/tableData/TableData";
 import RainFallChart from "../components/Chart/RainFallChart";
 import { FilterForChart } from "../utils/FilterForChart";
-import { findMinMax } from "../utils/findMinMax";
+import { findMinMax1, findMinMax2 } from "../utils/findMinMax";
 import { DefaultLayout } from "../layouts/DefaultLayout";
 import moment from "moment";
+import InfoIcon from "@mui/icons-material/Info";
+import { formatDataForChart } from "../utils/FormatDataForChart";
+import { OtherValue } from "../utils/OtherValue";
 
 const DashBoard = () => {
   const {
@@ -59,56 +62,49 @@ const DashBoard = () => {
 
   //----------------date filter------------------
 
-  const filterDateTime = useMemo(() => {
-    return FilterForChart(
-      dayObjectChosen,
-      initialIndex,
-      currentProject,
-      allSenSorValue
-    );
-  }, [dayObjectChosen, initialIndex]);
+  // const filterDateTime = useMemo(() => {
+  //   return FilterForChart(
+  //     dayObjectChosen,
+  //     initialIndex,
+  //     currentProject,
+  //     allSenSorValue
+  //   );
+  // }, [dayObjectChosen, initialIndex]);
 
-  const {
-    initialValueCreated,
-    initialValueField1,
-    initialValueField2,
-    filteredObjectCreated,
-    filteredObjectField1,
-    filteredObjectField2,
-    valueCreate,
-    valueField1,
-    valueField2,
-  } = filterDateTime;
+  // const {
+  //   initialValueCreated,
+  //   initialValueField1,
+  //   initialValueField2,
+  //   filteredObjectCreated,
+  //   filteredObjectField1,
+  //   filteredObjectField2,
+  //   valueCreate,
+  //   valueField1,
+  //   valueField2,
+  // } = filterDateTime;
   //---------------------------------
 
-  useEffect(() => {
-    setInitialIndex({
-      indexEnd: allSenSorValue.length - 1,
-      indexStart: allSenSorValue.length - 40,
-    });
-    const dataForCSV = allSenSorValue?.map((data) => {
-      return {
-        date: moment(data.created_at).format("DD/MM/YYYY hh:mm a"),
-        depth_1: (
-          (data?.field1 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
-          3000
-        ).toFixed(0),
-        depth_2: (
-          (data?.field2 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
-          3000
-        ).toFixed(0),
-      };
-    });
-    setDataCSV(dataForCSV);
-  }, [allSenSorValue]);
-
-  const { min, max } = findMinMax(
-    dayObjectChosen ? filteredObjectField1 : valueField1
-  );
-  const firstValue = dayObjectChosen ? filteredObjectField1[0] : valueField1[0];
-  const lastValue = dayObjectChosen
-    ? filteredObjectField1[filteredObjectField1.length - 1]
-    : valueField1[valueField1.length - 1];
+  // useEffect(() => {
+  //   setInitialIndex({
+  //     indexEnd: allSenSorValue?.length - 1,
+  //     indexStart: allSenSorValue?.length - 40,
+  //   });
+  //   console.log(allSenSorValue);
+  //   const dataForCSV = allSenSorValue?.map((data) => {
+  //     return {
+  //       date: moment(data.created_at).format("DD/MM/YYYY hh:mm a"),
+  //       depth_1: (
+  //         (data?.field1 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
+  //         3000
+  //       ).toFixed(0),
+  //       depth_2: (
+  //         (data?.field2 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
+  //         3000
+  //       ).toFixed(0),
+  //     };
+  //   });
+  //   setDataCSV(dataForCSV);
+  // }, [allSenSorValue]);
 
   useEffect(() => {
     setIsOpenSideBar(false);
@@ -117,33 +113,27 @@ const DashBoard = () => {
     setIsChooseMapPopup(true);
     setIsPopupProjectManagementMob(false);
   };
-  useEffect(() => {
-    const scrollbarDivHome =
-      document.getElementsByClassName("scrollbarDivHome");
-    scrollbarDivHome[0].addEventListener("mouseover", () => {
-      scrollbarDivHome[0].classList.remove("scrollbar");
-    });
-    scrollbarDivHome[0].addEventListener("mouseout", () => {
-      scrollbarDivHome[0].classList.add("scrollbar");
-    });
-  }, []);
 
+  const {
+    min1,
+    max1,
+    min2,
+    max2,
+    firstValue1,
+    firstValue2,
+    lastValue1,
+    lastValue2,
+  } = OtherValue(currentProject, allSenSorValue);
+  console.log(currentProject);
   return (
     <DefaultLayout title="My Dashboard">
-      {isAnotherValue && (
-        <section className="shadow-xl absolute left-0 w-full h-screen z-50 flex items-center justify-center  dark:bg-[#2a213a] ">
-          <div
-            onClick={() => setIsAnotherValue(false)}
-            className="absolute top-0 left-0 w-full bg-black opacity-80 h-screen z-50"
-          ></div>
-          <div className="flex flex-col w-1/2 lex-wrap gap-1 bg-white z-50 rounded h-1/2 p-2">
-            <Volt />
-            <Degree />
-            <HumidPercentage />
-            <Storage />
-            <RainFall />
-          </div>
-        </section>
+      {isProjectconversion && (
+        <ProjectConversion
+          setIsProjectConversion={setIsProjectConversion}
+          setCurrentProject={setCurrentProject}
+          allProjects={allProjects}
+          isProjectConversion={isProjectconversion}
+        />
       )}
       {isOpenSideBar && <MobBar setIsOpenSideBar />}
       {isOpenChart && (
@@ -156,12 +146,12 @@ const DashBoard = () => {
           </div>
           <div className=" dark:bg-[#2a213a] dark:text-white scrollbar pt-2 w-full  h-fit bg-white rounded px-4">
             <Chart
-              filteredObjectCreated={filteredObjectCreated}
-              valueCreate={valueCreate}
-              valueField1={valueField1}
-              valueField2={valueField2}
-              filteredObjectField1={filteredObjectField1}
-              filteredObjectField2={filteredObjectField1}
+            // filteredObjectCreated={filteredObjectCreated}
+            // valueCreate={valueCreate}
+            // valueField1={valueField1}
+            // valueField2={valueField2}
+            // filteredObjectField1={filteredObjectField1}
+            // filteredObjectField2={filteredObjectField1}
             />
           </div>
         </section>
@@ -222,64 +212,181 @@ const DashBoard = () => {
           </div>
         </div>
       )}
+
       <div className="scrollbar relative w-full flex flex-row rounded bg-white md:flex-nowrap flex-wrap h-full">
-        <div className="scrollbar animate-slideInToLeft md:animate-opacity dark:bg-slate-900 flex lg:flex-row w-full h-full gap-1 p-1 createBg ">
-          <div className="scrollbar scrollbarDivHome flex flex-col gap-1 md:w-4/5 w-full overflow-auto h-full">
+        <div className="scrollbar animate-slideInToLeft md:animate-opacity dark:bg-slate-900 flex lg:flex-row w-full h-fit gap-1 p-1 overflow-auto createBg ">
+          <div className="scrollbar scrollbarDivHome flex flex-col gap-1 w-full h-full">
             <ProjectMangagementMob
               currentProject={currentProject}
               setIsPopupProjectManagementMob={setIsPopupProjectManagementMob}
             />
-            <DatePickerValue />
-            <div className="shadow-xl w-full flex  lg:flex-row gap-1 flex-col">
+            <div className="shadow-xl w-full flex h-20 lg:flex-row gap-1 flex-col">
+              <div className="w-1/2 p-2  px-4 flex justify-start gap-4 bg-white items-center text-black rounded">
+                <div
+                  onClick={() => setIsProjectConversion(true)}
+                  className=" cursor-pointer px-4 p-2 rounded border-[1px] border-black flex gap-2 items-center"
+                >
+                  <LoopIcon className="text-blue-500" sx={{ fontSize: 30 }} />
+                  <span>Change Project</span>
+                </div>
+                <span className=" dark:text-white font-bold text-[30px] flex items-center break-all text-blue-500">
+                  {currentProject?.projectName || (
+                    <span className="text-xl font-bold">
+                      Please choose project
+                    </span>
+                  )}
+                </span>
+              </div>
               <ButtonControl
                 loadTable={loadTable}
                 setloadTable={setloadTable}
               />
+            </div>
+            <DatePickerValue />
+
+            <section className="flex gap-1 flex-wrap lg:flex-nowrap">
+              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
+                <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
+                  <div
+                    onClick={() => setReFreshChart(!reFreshChart)}
+                    className="cursor-pointer absolute top-2 right-2  z-40 p-1 color-Primary rounded text-white"
+                  >
+                    <RefreshIcon sx={{ fontSize: 30 }} />
+                  </div>
+                  <Chart />
+                </div>
+              </div>
+              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
+                <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
+                  <div
+                    onClick={() => setReFreshChart(!reFreshChart)}
+                    className="cursor-pointer absolute top-2 right-2  z-50 p-1 color-Primary rounded text-white"
+                  >
+                    <RefreshIcon sx={{ fontSize: 30 }} />
+                  </div>
+                  <RainFallChart />
+                </div>
+              </div>
+            </section>
+            <div className="shadow-xl w-full flex h-28 lg:flex-row gap-1 flex-col">
               <div className="flex flex-row w-full lg:w-1/2 gap-1">
-                <MinMax name="Max Value" value={max} />
-                <MinMax name="Min Value" value={min} />
-                <MinMax name="First Value" value={firstValue} />
-                <MinMax name="Last Value" value={lastValue} />
+                <MinMax name="Max Value 1" value={max1} />
+                <MinMax name="Min Value 1" value={min1} />
+                <MinMax name="First Value 1" value={firstValue1} />
+                <MinMax name="Last Value 1" value={lastValue1} />
+              </div>
+              <div className="flex flex-row w-full lg:w-1/2 gap-1">
+                <MinMax name="Max Value 2" value={max2} />
+                <MinMax name="Min Value 2" value={min2} />
+                <MinMax name="First Value 2" value={firstValue2} />
+                <MinMax name="Last Value 2" value={lastValue2} />
               </div>
             </div>
-            <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
-              <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-2 w-full  h-fit bg-white rounded px-4">
-                <div
-                  onClick={() => setReFreshChart(!reFreshChart)}
-                  className="cursor-pointer absolute top-2 right-2  z-40 p-1 color-Primary rounded text-white"
-                >
-                  <RefreshIcon sx={{ fontSize: 30 }} />
-                </div>
-                <Chart
-                  initialValueCreated={initialValueCreated}
-                  initialValueField2={initialValueField2}
-                  initialValueField1={initialValueField1}
-                  filteredObjectCreated={filteredObjectCreated}
-                  filteredObjectField1={filteredObjectField1}
-                  filteredObjectField2={filteredObjectField2}
-                />
-              </div>
-            </div>
-            <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
-              <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-2 w-full  h-fit bg-white rounded px-4">
-                <div
-                  onClick={() => setReFreshChart(!reFreshChart)}
-                  className="cursor-pointer absolute top-2 right-2  z-50 p-1 color-Primary rounded text-white"
-                >
-                  <RefreshIcon sx={{ fontSize: 30 }} />
-                </div>
-                <RainFallChart />
-              </div>
-            </div>
-            <div className="dark:bg-slate-900 md:hidden flex flex-col w-full lex-wrap gap-1 bg-slate-200 md:bg-white rounded h-1/2 p-2">
+            <div className="flex w-full lex-wrap gap-1 bg-white rounded h-fit p-2">
               <Volt />
               <Degree />
               <HumidPercentage />
               <Storage />
               <RainFall />
             </div>
+            <div className="py-4">
+              <hr className="w-3/5 mx-auto" />
+            </div>
+            <section className=" border-white border-[1px] truncate rounded-tl-md rounded-tr-md mb-4">
+              <div className="w-full p-2 bg-white text-sm text-white color-Primary font-light gap-4 flex items-center justify-center">
+                <span className="">
+                  <InfoIcon />
+                </span>
+                <span>Project Detail</span>
+              </div>
+              <table className=" min-w-full divide-y divide-white-200 bg-white dark:divide-gray-700">
+                <thead className="animate-opacity text-black border-b-[1px] border-slate-300">
+                  <tr className="font-light text-left">
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase" />
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase">
+                      Name
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase">
+                      Install date
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase">
+                      Esp status
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase">
+                      Pump status
+                    </th>
+                    <th className="px-6 py-3 text-center text-xs font-medium uppercase">
+                      Device
+                    </th>
+                    <th className="p-2 px-4 text-center font-semibold text-sm">
+                      Depth level 1
+                    </th>
+                    <th className="p-2 px-4 text-left font-semibold text-sm">
+                      Depth level 2
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="animate-opacity overflow-auto">
+                  {/* {currentProject?.map((data, index) => ( */}
+                  <tr
+                    className="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800 border-b-[1px] border-slate-300"
+                    key={currentProject.pid}
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                      #
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200 text-center">
+                      {currentProject.projectName}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                      {moment(currentProject?.created_at).format("DD/MM/YYYY")}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                      {currentProject?.isEsp ? (
+                        <span className="text-green-600 bg-green-200 p-2 rounded">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="text-orange-600 bg-orange-200 p-2 rounded">
+                          Inactive
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                      {currentProject?.isPump ? (
+                        <span className="text-green-600 bg-green-200 p-2 rounded">
+                          Active
+                        </span>
+                      ) : (
+                        <span className="text-orange-600 bg-orange-200 p-2 rounded">
+                          Inactive
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                      {currentProject.type}
+                    </td>
+                    <td className="p-2 px-4 text-center font-semibold text-sm">
+                      {currentProject?.depth_level_1 ? (
+                        currentProject?.depth_level_1
+                      ) : (
+                        <span className="text-red-500">_ _</span>
+                      )}
+                    </td>
+                    <td className="p-2 px-4 text-center  font-semibold text-sm">
+                      {currentProject?.depth_level_2 ? (
+                        currentProject?.depth_level_2
+                      ) : (
+                        <span className="text-red-500">_ _</span>
+                      )}
+                    </td>
+                  </tr>
+                  {/* ))} */}
+                </tbody>
+              </table>
+            </section>
           </div>
-          <div className="relative md:block hidden shadow-xl h-full w-full md:w-1/5 md:mb-0 mb-10 bg-white rounded dark:bg-[#2a213a] dark:text-white">
+          {/* <div className="relative md:block hidden shadow-xl h-full w-full md:w-1/5 md:mb-0 mb-10 bg-white rounded dark:bg-[#2a213a] dark:text-white">
             <div className="absolute bottom-0 color-Primary text-white w-full h-fit p-4 font-bold z-40 flex items-center justify-center">
               <CSVLink data={dataCSV} filename={currentProject?.projectName}>
                 Export
@@ -309,7 +416,7 @@ const DashBoard = () => {
               )}
               <TableData setloadTable={setloadTable} loadTable={loadTable} />
             </ul>
-          </div>
+          </div> */}
         </div>
       </div>
     </DefaultLayout>

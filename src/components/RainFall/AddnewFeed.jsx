@@ -43,22 +43,22 @@ export const AddnewFeed = ({
           data: data,
         })
         .then((res) => {
-          console.log(res.data);
-          // try {
-          //   apiProjectService.put(`/projects/${chooseDetail?.pid}`, {
-          //     rainFall: postFeedRef.current?.value,
-          //   });
-          // } catch (error) {
-          //   console.log(err);
-          // }
-          // setIsPostFeed(false);
-          // setLoadAllRain(!loadAllRain);
-          // toast.success(`Create successfully!`, {
-          //   backgroundColor: "green",
-          //   color: "#ffffff",
-          //   position: "top-right",
-          //   delay: 2000,
-          // });
+          // console.log(res.data);
+          try {
+            apiProjectService.put(`/projects/${chooseDetail?.pid}`, {
+              rainFall: postFeedRef.current?.value,
+            });
+          } catch (error) {
+            console.log(err);
+          }
+          setIsPostFeed(false);
+          setLoadAllRain(!loadAllRain);
+          toast.success(`Create successfully!`, {
+            backgroundColor: "green",
+            color: "#ffffff",
+            position: "top-right",
+            delay: 2000,
+          });
         })
         .catch((err) =>
           toast.error(`Something's wrong!`, {
