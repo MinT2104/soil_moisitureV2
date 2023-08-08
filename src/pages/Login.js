@@ -119,7 +119,7 @@ const Login = () => {
 
   return (
     <div className=" z-20 w-full createBg h-screen flex items-center justify-center">
-      <ToastContainer />
+      <ToastContainer delay={3000} />
       {/* <form 
         className="md:h-fit h-full w-full md:w-2/3 lg:w-1/3 bg-white flex flex-col justify-center items-center md:rounded-2xl gap-4 py-10">
 

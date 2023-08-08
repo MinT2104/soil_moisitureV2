@@ -68,8 +68,7 @@ const RainFallChart = ({}) => {
       valueField1.push(data?.field1);
     }
   });
-  console.log(valueField1);
-  console.log(valueCreate);
+
   //----------------------------------------------
 
   const data = {
@@ -86,7 +85,7 @@ const RainFallChart = ({}) => {
     //         .reverse(),
     datasets: [
       {
-        label: "Rainfall",
+        label: "Rainfall Station",
         data: valueField1,
         borderColor: "blue",
         backgroundColor: "blue",

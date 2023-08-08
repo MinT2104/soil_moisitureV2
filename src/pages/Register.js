@@ -183,7 +183,7 @@ const Login = () => {
 
   return (
     <div className=" z-20 w-full createBg h-screen flex items-center justify-center">
-      <ToastContainer />
+      <ToastContainer delay={3000} />
       <section className="w-full md:w-4/5 h-full md:h-fit lg:w-2/3 mx-auto flex items-center bg-white md:rounded-2xl truncate px-4">
         <form
           onSubmit={handleSubmit}

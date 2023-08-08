@@ -7,6 +7,7 @@ export const useAllProject = (userRedux, loadCreation) => {
   const dispatch = useDispatch();
   const [allProjects, setAllProjects] = useState([]);
   useLayoutEffect(() => {
+    const abortCtrl = new AbortController();
     const getData = async () => {
       apiProjectService
         .post(`/user/getauser`, { uid: userRedux.user?.uid })
@@ -22,8 +23,11 @@ export const useAllProject = (userRedux, loadCreation) => {
         });
     };
     getData();
+
+    return () => {
+      abortCtrl.abort();
+    };
   }, [loadCreation, userRedux.user?.uid]);
-  // console.log("getallproject");
 
   return { allProjects };
 };

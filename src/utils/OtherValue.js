@@ -7,10 +7,10 @@ export const OtherValue = (currentProject, allSenSorValue) => {
   }, [allSenSorValue]);
   const { min1, max1 } = findMinMax1(field1);
   const { min2, max2 } = findMinMax2(field2);
-  const firstValue1 = allSenSorValue[0]?.field1;
-  const lastValue1 = allSenSorValue[allSenSorValue?.length - 1]?.field1;
-  const firstValue2 = allSenSorValue[0]?.field2;
-  const lastValue2 = allSenSorValue[allSenSorValue?.length - 1]?.field2;
+  const firstValue1 = field1[0];
+  const lastValue1 = field1[field1?.length - 1];
+  const firstValue2 = field2[0];
+  const lastValue2 = field2[field2?.length - 1];
 
   return {
     min1,

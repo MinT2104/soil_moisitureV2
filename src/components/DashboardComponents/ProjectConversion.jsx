@@ -9,7 +9,6 @@ export const ProjectConversion = ({
   isProjectConversion,
 }) => {
   const dispatch = useDispatch();
-
   return (
     <div className=" h-[calc(100%-60px)] animate-opacity dark:bg-[#2a213a] dark:text-white w-[300px] bg-white absolute">
       <ul>
@@ -25,8 +24,8 @@ export const ProjectConversion = ({
             key={index}
             onClick={() => {
               dispatch(setCurrentProject(data));
-              setIsPopupProjectManagementMob(false);
-              setIsProjectConversion(!isProjectConversion);
+              // setIsPopupProjectManagementMob(false);
+              setIsProjectConversion(false);
             }}
             className="py-4 px-12 dark:hover:text-black font-light  hover:bg-slate-200 duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-2 items-center"
           >

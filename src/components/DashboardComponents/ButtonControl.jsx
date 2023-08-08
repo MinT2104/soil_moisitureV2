@@ -114,7 +114,7 @@ const ButtonControl = ({ setloadTable, loadTable }) => {
         isRead: false,
       });
     } else {
-      await apiProjectService.put(`/pump/${currentProject.pid}`, { value: 0 });
+      await apiProjectService.put(`/pump/${currentProject?.pid}`, { value: 0 });
       await apiProjectService.post(`/noti/addnew`, {
         pid: currentProject?.pid,
         projectName: currentProject?.projectName,
@@ -137,7 +137,7 @@ const ButtonControl = ({ setloadTable, loadTable }) => {
   useEffect(() => {
     const getData = () => {
       apiProjectService
-        .get(`/projects/${currentProject.pid}`)
+        .get(`/projects/${currentProject?.pid}`)
         .then((res) => {
           setButtonChange(res.data[0]);
         })

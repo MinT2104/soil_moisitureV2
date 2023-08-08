@@ -6,12 +6,19 @@ export const useGetUser = (loadUser) => {
   const dispatch = useDispatch();
   const userRedux = useSelector((state) => state);
   useLayoutEffect(() => {
+    const abortCtrl = new AbortController();
+    let isMuted = false;
     const getData = async () => {
       apiProjectService
         .post(`/user/getauser`, { uid: userRedux.user?.uid })
         .then((res) => dispatch(login(res.data)));
     };
     getData();
+
+    return () => {
+      abortCtrl.abort();
+      isMuted = true;
+    };
   }, [loadUser]);
 
   return;

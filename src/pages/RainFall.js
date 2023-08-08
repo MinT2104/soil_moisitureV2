@@ -31,24 +31,24 @@ export const RainFall = () => {
   const [projectchose, setProjectChose] = useState({
     projectName: "Choose Project",
   });
+  const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({});
   const [loadAllRain, setLoadAllRain] = useState(false);
-  const [chooseDetail, setChooseDetail] = useState({});
+  const [chooseDetail, setChooseDetail] = useState("");
   const [postFeedDay, setPostFeedDay] = useState("");
   const [postFeedTime, setPostFeedTime] = useState("");
   const [popupDel, setPopupDel] = useState({ isPopup: false, data: {} });
-
-  const nameRef = useRef();
+  const [chooseDetailData, setChooseDetailData] = useState([]);
+  const [espName, setEspName] = useState("");
+  const nameRef = useRef(null);
   const postFeedRef = useRef();
   const handleSubmit = () => {
     const objChose = {
-      espName: nameRef.current?.value,
+      espName: espName,
       pid: projectchose.pid,
       uid: userRedux.user?.uid,
-      feeds: [],
     };
     if (objChose?.pid === undefined || objChose?.espName === "") {
-      // nameRef.current?.value = ""
       setAlert({ isOpen: true, message: "All fields required" });
       setTimeout(() => {
         setAlert({});
@@ -79,8 +79,9 @@ export const RainFall = () => {
     try {
       apiProjectService
         .put(`/rain/deleteAItemAtFeed`, {
-          espName: chooseDetail?.espName,
-          entryId: data?.entryId,
+          pid: chooseDetail,
+          generated_date: data?.generated_date,
+          field1: data?.field1,
         })
         .then((res) => {
           setPopupDel({ isPopup: false, data: {} });
@@ -91,6 +92,7 @@ export const RainFall = () => {
             position: "top-right",
             delay: 2000,
           });
+          setLoading(!loading);
         });
       setPopupDel({ isPopup: false, data: {} });
     } catch (error) {
@@ -106,6 +108,8 @@ export const RainFall = () => {
       {isOpenSideBar && <MobBar setIsOpenSideBar />}
       {isPostFeed && (
         <AddnewFeed
+          loading={loading}
+          setLoading={setLoading}
           setIsPostFeed={setIsPostFeed}
           isPostFeed={isPostFeed}
           postFeedRef={postFeedRef}
@@ -144,7 +148,8 @@ export const RainFall = () => {
                 projectchose={projectchose}
               />
               <input
-                ref={nameRef}
+                defaultValue={espName}
+                onChange={(e) => setEspName(e.target.value)}
                 className={`outline-none rounded border-[1px] w-full p-4 px-4 bg-slate-100
                                 ${
                                   alert?.isOpen
@@ -176,9 +181,9 @@ export const RainFall = () => {
 
       <div className="w-full animate-slideInToLeft md:animate-opacity">
         <div className="w-full relative h-full p-2 bg-[#f2f2f2]  dark:bg-slate-900">
-          {chooseDetail?.pid !== undefined && (
+          {chooseDetail !== "" && (
             <div
-              onClick={() => setChooseDetail({})}
+              onClick={() => setChooseDetail("")}
               className="absolute z-30 top-0 left-0 w-full h-full bg-black opacity-75"
             />
           )}
@@ -219,7 +224,7 @@ export const RainFall = () => {
                 />
               </div>
             </div>
-            {chooseDetail?.pid !== undefined && (
+            {chooseDetail !== "" && (
               <div className="z-40 absolute top-0 right-0 w-2/3 p-2 h-full">
                 <div className="md:block rounded animate-slideInToLeft hidden  white dark:bg-[#2a213a] bg-white w-full h-1/2 md:h-full pb-10 overflow-auto scrollbar">
                   <>
@@ -242,6 +247,9 @@ export const RainFall = () => {
                     </div>
                     <div className="w-full md:overflow-visible h-[calc(100%-74px)] p-4 pt-0 flex flex-col gap-2">
                       <RainFallDetail
+                        loading={loading}
+                        setChooseDetailData={setChooseDetailData}
+                        chooseDetailData={chooseDetailData}
                         setIsAddNew={setIsAddNew}
                         setThreeDot={setThreeDot}
                         threeDot={threeDot}
@@ -255,7 +263,7 @@ export const RainFall = () => {
               </div>
             )}
 
-            {chooseDetail?.pid === undefined ? (
+            {chooseDetail === "" ? (
               <div className=" animate-slideIn md:hidden block bg-white dark:bg-[#2a213a] rounded w-full md:w-1/5 h-1/2 md:h-full border-r-[1px] border-slate-300 overflow-hidden">
                 <div className="p-4">
                   {isAddNew ? (
@@ -330,7 +338,7 @@ export const RainFall = () => {
                 <div className="animate-slideInToLeft md:hidden block relative w-full md:w-3/5 bg-white dark:bg-[#2a213a] h-full pb-10 overflow-auto scrollbar">
                   <div className="p-4 flex justify-between sticky left-0 top-0 bg-white dark:bg-[#2a213a]">
                     <div
-                      onClick={() => setChooseDetail({})}
+                      onClick={() => setChooseDetail("")}
                       className="flex items-center gap-2 text-blue-500 p-2 rounded hover:bg-slate-100 cursor-pointer"
                     >
                       <ArrowBackIcon /> <span>Back</span>

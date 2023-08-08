@@ -5,6 +5,7 @@ export const useAllUserRain = (loadAllRain, userRedux) => {
   const [allRain, setAllRain] = useState([]);
 
   useLayoutEffect(() => {
+    const abortCtrl = new AbortController();
     const getData = async () => {
       apiProjectService
         .post("/rain/alluserrain", {
@@ -14,6 +15,10 @@ export const useAllUserRain = (loadAllRain, userRedux) => {
         .catch((err) => console.log(err));
     };
     getData();
+
+    return () => {
+      abortCtrl.abort();
+    };
   }, [loadAllRain]);
 
   return { allRain };

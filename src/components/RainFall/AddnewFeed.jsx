@@ -22,12 +22,15 @@ export const AddnewFeed = ({
   loadAllRain,
   setLoadAllRain,
   chooseDetail,
+  loading,
+  setLoading,
 }) => {
   const { currentProject } = useContext(AppContext);
   const [err, setErr] = useState({ isOpen: false, message: "" });
   const handlePostFeed = () => {
     const data = {
-      generated_date: postFeedDay["$d"],
+      pid: chooseDetail,
+      generated_date: moment(postFeedDay["$d"]).endOf("date"),
       generated_time: postFeedTime["$d"],
       unit: "mm",
       field1: postFeedRef.current?.value,
@@ -38,10 +41,7 @@ export const AddnewFeed = ({
       data.generated_time !== undefined
     ) {
       apiProjectService
-        .post("/rain/addFeed", {
-          pid: chooseDetail?.pid,
-          data: data,
-        })
+        .post("/rain/addFeed", data)
         .then((res) => {
           // console.log(res.data);
           try {
@@ -53,6 +53,7 @@ export const AddnewFeed = ({
           }
           setIsPostFeed(false);
           setLoadAllRain(!loadAllRain);
+          setLoading(!loading);
           toast.success(`Create successfully!`, {
             backgroundColor: "green",
             color: "#ffffff",

@@ -36,6 +36,7 @@ import moment from "moment";
 import InfoIcon from "@mui/icons-material/Info";
 import { formatDataForChart } from "../utils/FormatDataForChart";
 import { OtherValue } from "../utils/OtherValue";
+import apiProjectService from "../services/ApiProjectService";
 
 const DashBoard = () => {
   const {
@@ -59,6 +60,7 @@ const DashBoard = () => {
   const [isAnotherValue, setIsAnotherValue] = useState(false);
   const [initialIndex, setInitialIndex] = useState({});
   const [dataCSV, setDataCSV] = useState([]);
+  const [rainValue, setRainValue] = useState(NaN);
 
   //----------------date filter------------------
 
@@ -83,31 +85,57 @@ const DashBoard = () => {
   //   valueField2,
   // } = filterDateTime;
   //---------------------------------
-
-  // useEffect(() => {
-  //   setInitialIndex({
-  //     indexEnd: allSenSorValue?.length - 1,
-  //     indexStart: allSenSorValue?.length - 40,
-  //   });
-  //   console.log(allSenSorValue);
-  //   const dataForCSV = allSenSorValue?.map((data) => {
-  //     return {
-  //       date: moment(data.created_at).format("DD/MM/YYYY hh:mm a"),
-  //       depth_1: (
-  //         (data?.field1 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
-  //         3000
-  //       ).toFixed(0),
-  //       depth_2: (
-  //         (data?.field2 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
-  //         3000
-  //       ).toFixed(0),
-  //     };
-  //   });
-  //   setDataCSV(dataForCSV);
-  // }, [allSenSorValue]);
+  const { field1, field2, date } = useMemo(() => {
+    return formatDataForChart(currentProject, allSenSorValue);
+  }, [allSenSorValue]);
 
   useEffect(() => {
-    setIsOpenSideBar(false);
+    const abortCtrl = new AbortController();
+    let isMuted = false;
+    setInitialIndex({
+      indexEnd: allSenSorValue?.length - 1,
+      indexStart: allSenSorValue?.length - 40,
+    });
+    const dataForCSV = allSenSorValue?.map((data) => {
+      return {
+        date: moment(data.created_at).format("DD/MM/YYYY hh:mm a"),
+        depth_1: (
+          (data?.field1 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
+          3000
+        ).toFixed(0),
+        depth_2: (
+          (data?.field2 / (currentProject?.type === "Esp32" ? 4095 : 1023)) *
+          3000
+        ).toFixed(0),
+      };
+    });
+    setDataCSV(dataForCSV);
+    return () => {
+      abortCtrl.abort();
+      isMuted = true;
+    };
+  }, [allSenSorValue]);
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    let isMuted = false;
+
+    const getRain = async () => {
+      const data = await apiProjectService.post("/rain/getallfeed", {
+        pid: currentProject?.pid,
+      });
+      setRainValue(data?.data[data.data?.length - 1]?.field1);
+    };
+    getRain();
+
+    return () => {
+      abortCtrl.abort();
+      isMuted = true;
+    };
+  }, [currentProject]);
+  useEffect(() => {
+    setIsOpenSideBar(true);
+
+    return setIsOpenSideBar(false);
   }, []);
   const handleMapPopup = () => {
     setIsChooseMapPopup(true);
@@ -124,7 +152,7 @@ const DashBoard = () => {
     lastValue1,
     lastValue2,
   } = OtherValue(currentProject, allSenSorValue);
-  console.log(currentProject);
+
   return (
     <DefaultLayout title="My Dashboard">
       {isProjectconversion && (
@@ -283,11 +311,13 @@ const DashBoard = () => {
               </div>
             </div>
             <div className="flex w-full lex-wrap gap-1 bg-white rounded h-fit p-2">
-              <Volt />
+              <Volt number={1} data={field1[field1?.length - 1]} />
+              <Volt number={2} data={field2[field2?.length - 1]} />
+              <HumidPercentage number={1} data={field1[field1?.length - 1]} />
+              <HumidPercentage number={2} data={field2[field2?.length - 1]} />
               <Degree />
-              <HumidPercentage />
               <Storage />
-              <RainFall />
+              <RainFall data={rainValue} />
             </div>
             <div className="py-4">
               <hr className="w-3/5 mx-auto" />
@@ -324,64 +354,87 @@ const DashBoard = () => {
                     <th className="p-2 px-4 text-left font-semibold text-sm">
                       Depth level 2
                     </th>
+                    <th className="p-2 px-4 text-left font-semibold text-sm">
+                      Data
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="animate-opacity overflow-auto">
-                  {/* {currentProject?.map((data, index) => ( */}
-                  <tr
-                    className="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800 border-b-[1px] border-slate-300"
-                    key={currentProject.pid}
-                  >
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                      #
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200 text-center">
-                      {currentProject.projectName}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                      {moment(currentProject?.created_at).format("DD/MM/YYYY")}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                      {currentProject?.isEsp ? (
-                        <span className="text-green-600 bg-green-200 p-2 rounded">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="text-orange-600 bg-orange-200 p-2 rounded">
-                          Inactive
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                      {currentProject?.isPump ? (
-                        <span className="text-green-600 bg-green-200 p-2 rounded">
-                          Active
-                        </span>
-                      ) : (
-                        <span className="text-orange-600 bg-orange-200 p-2 rounded">
-                          Inactive
-                        </span>
-                      )}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
-                      {currentProject.type}
-                    </td>
-                    <td className="p-2 px-4 text-center font-semibold text-sm">
-                      {currentProject?.depth_level_1 ? (
-                        currentProject?.depth_level_1
-                      ) : (
-                        <span className="text-red-500">_ _</span>
-                      )}
-                    </td>
-                    <td className="p-2 px-4 text-center  font-semibold text-sm">
-                      {currentProject?.depth_level_2 ? (
-                        currentProject?.depth_level_2
-                      ) : (
-                        <span className="text-red-500">_ _</span>
-                      )}
-                    </td>
-                  </tr>
-                  {/* ))} */}
+                  {currentProject?.projectName === undefined ? (
+                    <tr>
+                      <td
+                        className="px-6 py-4 whitespace-nowrap uppercase text-sm text-red-500 dark:text-gray-200 text-center"
+                        colSpan={8}
+                      >
+                        Project is not available
+                      </td>
+                    </tr>
+                  ) : (
+                    <tr
+                      className="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800 border-b-[1px] border-slate-300"
+                      key={currentProject.pid}
+                    >
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                        #
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200 text-center">
+                        {currentProject.projectName}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                        {moment(currentProject?.created_at).format(
+                          "DD/MM/YYYY"
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                        {currentProject?.isEsp ? (
+                          <span className="text-green-600 bg-green-200 p-2 rounded">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-orange-600 bg-orange-200 p-2 rounded">
+                            Inactive
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                        {currentProject?.isPump ? (
+                          <span className="text-green-600 bg-green-200 p-2 rounded">
+                            Active
+                          </span>
+                        ) : (
+                          <span className="text-orange-600 bg-orange-200 p-2 rounded">
+                            Inactive
+                          </span>
+                        )}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200 text-center">
+                        {currentProject.type}
+                      </td>
+                      <td className="p-2 px-4 text-center font-semibold text-sm">
+                        {currentProject?.depth_level_1 ? (
+                          currentProject?.depth_level_1
+                        ) : (
+                          <span className="text-red-500">_ _</span>
+                        )}
+                      </td>
+                      <td className="p-2 px-4 text-center  font-semibold text-sm">
+                        {currentProject?.depth_level_2 ? (
+                          currentProject?.depth_level_2
+                        ) : (
+                          <span className="text-red-500">_ _</span>
+                        )}
+                      </td>
+                      <td className=" p-2 px-4 text-center  font-semibold text-sm">
+                        <CSVLink
+                          className="bottom-0 color-Primary text-white w-full h-fit p-2 rounded font-bold z-40 flex items-center justify-center"
+                          data={dataCSV}
+                          filename={currentProject?.projectName}
+                        >
+                          Export
+                        </CSVLink>
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </section>

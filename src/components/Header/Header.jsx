@@ -27,6 +27,7 @@ const Header = (props) => {
   const dropDownRef = useRef(null);
   const dispatch = useDispatch();
   const userRedux = useSelector((state) => state);
+  const { setAllSenSorValue } = useContext(AppContext);
   const [isPopupUser, setIsPopupUser] = useState(false);
   const [dark, setDark] = useState("false");
 
@@ -40,7 +41,7 @@ const Header = (props) => {
   });
 
   const handleLogOut = () => {
-    if (userRedux.user.providerId) {
+    if (userRedux.user?.providerId) {
       dispatch(setCurrentProject({}));
       dispatch(logoutGoogle());
       navigate("/login");
@@ -48,6 +49,7 @@ const Header = (props) => {
       dispatch(logout());
       navigate("/login");
       dispatch(setCurrentProject({}));
+      setAllSenSorValue([]);
     }
     setTimeout(() => {
       toast.success("Log out successfully!", {

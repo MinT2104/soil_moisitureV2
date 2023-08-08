@@ -1,15 +1,10 @@
-import { createContext, useState, useEffect, useLayoutEffect } from "react";
-import { memo } from "react";
-import apiProjectService from "../services/ApiProjectService";
+import { createContext, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { login, loginWithGoogle } from "../redux/reducer/userSlice";
 import { useAllProject } from "../hooks/useAllProject";
 import { useGetUser } from "../hooks/useGetUser";
-import { useGetSenSorValue } from "../hooks/useGetSenSorValue";
 export const AppContext = createContext({});
 
 export const AppProvider = ({ children }) => {
-  const dispatch = useDispatch();
   const userRedux = useSelector((state) => state);
   const currentProject = useSelector((state) => state.currentProject);
   const [loading, setLoading] = useState(false);
@@ -25,15 +20,12 @@ export const AppProvider = ({ children }) => {
   const [allSenSorValue, setAllSenSorValue] = useState([]);
   const [allRain, setAllRain] = useState([]);
 
-  // console.log(currentProject);
   const [isOpenSideBar, setIsOpenSideBar] = useState(false);
   const [reFreshChart, setReFreshChart] = useState(false);
 
   const { allProjects } = useAllProject(userRedux, loadCreation);
   useGetUser(loadUser);
-  // const { allSenSorValue, newSensorChange } = useGetSenSorValue(reFreshChart);
 
-  console.log(allRain);
   return (
     <AppContext.Provider
       value={{

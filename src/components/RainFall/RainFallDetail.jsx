@@ -5,6 +5,7 @@ import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import { RainThreeDotMobile } from "./RainThreeDotMobile";
 import { sortRainFall } from "../../utils/sortRainFall";
 import { useSelector } from "react-redux";
+import apiProjectService from "../../services/ApiProjectService";
 
 export const RainFallDetail = ({
   chooseDetail,
@@ -12,6 +13,9 @@ export const RainFallDetail = ({
   setThreeDot,
   threeDot,
   setIsAddNew,
+  setChooseDetailData,
+  chooseDetailData,
+  loading,
 }) => {
   const sortValue = useSelector((state) => state.sort);
   const handlePopupThreeDot = async (index) => {
@@ -38,8 +42,17 @@ export const RainFallDetail = ({
       index: undefined,
     });
   };
-  const sortData = sortRainFall(sortValue, chooseDetail);
-  console.log(sortData);
+  useEffect(() => {
+    const getData = async () => {
+      const data = await apiProjectService.post("/rain/getallfeed", {
+        pid: chooseDetail,
+      });
+      setChooseDetailData(data.data);
+    };
+    getData();
+  }, [chooseDetail, loading]);
+  const sortData = sortRainFall(sortValue, chooseDetailData);
+  console.log(chooseDetailData);
   return (
     <section className="p-4 pt-2 rounded border-[1px] border-slate-300">
       <table className=" min-w-full divide-y divide-gray-200 dark:divide-gray-700">

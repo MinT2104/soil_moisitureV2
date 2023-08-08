@@ -6,7 +6,7 @@ import moment from "moment";
 import { useAllProject } from "../../hooks/useAllProject";
 import { useAllUserRain } from "../../hooks/useAllUserRain";
 import FileDownloadRoundedIcon from "@mui/icons-material/FileDownloadRounded";
-import { CSVLink } from "react-csv";
+import { ExportCSV } from "../ExportCSV/ExportCSV";
 
 export const AllRainFall = ({
   loadAllRain,
@@ -55,80 +55,56 @@ export const AllRainFall = ({
           </tr>
         </thead>
         <tbody className="animate-opacity">
-          {Array.from(allRain).map((data, index) => (
-            <tr
-              className="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800"
-              key={index}
-            >
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                {index + 1}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
-                {data?.espName}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                {moment(data?.created_at).format("DD/MM/YYYY")}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                {relatedToProject(data.pid)}
-              </td>
-              <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
-                <button
-                  onClick={() => setChooseDetail(data)}
-                  className="px-4 p-2 color-Primary rounded text-white"
-                >
-                  Open
-                </button>
-              </td>
-              <td>
-                <CSVLink
-                  data={data?.feeds}
-                  filename="Rainfall"
-                  className="px-4 p-2 flex w-fit items-center gap-2 color-Primary rounded text-white"
-                >
-                  <FileDownloadRoundedIcon sx={{ fontSize: 20 }} />
-                  <span>Export</span>
-                </CSVLink>
-              </td>
-              <td className="text-center relative animate-slideUp">
-                <MoreHorizIcon className="bg-slate-200 rounded-full cursor-pointer dark:bg-transparent" />
+          {!allRain[0] ? (
+            <tr>
+              <td
+                className="px-6 py-4 whitespace-nowrap uppercase text-sm text-red-500 dark:text-gray-200 text-center"
+                colSpan={8}
+              >
+                No data
               </td>
             </tr>
-          ))}
+          ) : (
+            Array.from(allRain).map((data, index) => (
+              <tr
+                className="odd:bg-white even:bg-gray-100 dark:odd:bg-slate-900 dark:even:bg-slate-800"
+                key={index}
+              >
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                  {index + 1}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 dark:text-gray-200">
+                  {data?.espName}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                  {moment(data?.created_at).format("DD/MM/YYYY")}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                  {relatedToProject(data.pid)}
+                </td>
+                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-800 dark:text-gray-200">
+                  <button
+                    onClick={() => setChooseDetail(data.pid)}
+                    className="px-4 p-2 color-Primary rounded text-white"
+                  >
+                    Open
+                  </button>
+                </td>
+                <td>
+                  <ExportCSV
+                    dataID={data?.pid}
+                    name={data?.espName}
+                    path={"/rain/getallfeed"}
+                  />
+                </td>
+                <td className="text-center relative animate-slideUp">
+                  <MoreHorizIcon className="bg-slate-200 rounded-full cursor-pointer dark:bg-transparent" />
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
-      {/* <div
-        className={`p-4 animate-slideDown flex flex-col gap-2 overflow-auto dark:text-black ${height}`}
-      >
-        {Array.from(allRain)?.map((data) => (
-          <div
-            key={data.pid}
-            className={`${
-              chooseDetail.pid === data.pid &&
-              "bg-gray-300 dark:color-Primary dark:text-white"
-            } dark:bg-white  animate-slideDown  w-full rounded flex items-center justify-between px-4  cursor-pointer hover:bg-gray-300 duration-500`}
-          >
-            <div className="flex gap-2 w-4/5">
-              <input type="checkbox" alt="" />
-              <span
-                onClick={() => setChooseDetail(data)}
-                className="w-24 p-4 font-bold inline-block truncate break-all "
-              >
-                {data?.espName}
-              </span>
-              <span
-                onClick={() => setChooseDetail(data)}
-                className="font-light p-4 truncate "
-              >
-                {moment(data.created_at).format("DD/MM/YY hh:mm")}
-              </span>
-            </div>
-            <div>
-              <MoreHorizIcon />
-            </div>
-          </div>
-        ))}
-      </div> */}
     </>
   );
 };

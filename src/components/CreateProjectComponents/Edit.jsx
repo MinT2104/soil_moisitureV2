@@ -46,7 +46,7 @@ export const Edit = ({ isEdit, setIsEdit }) => {
         if (isPopupEditdetail?.name === "depth_level_2") {
           try {
             apiProjectService.put(`projects/${isEdit.data?.pid}`, {
-              depth_level_1: inputRef.current?.value,
+              depth_level_2: inputRef.current?.value,
             });
             setIsPopupEditDetail({ isOpen: false });
             setLoadCreation(!loadCreation);
@@ -70,7 +70,6 @@ export const Edit = ({ isEdit, setIsEdit }) => {
       }
     }
   };
-  console.log(projectChose);
   return (
     <div className="dark:text-black shadow-xl animate-opacity absolute top-0 left-0 w-full h-screen z-50 flex items-center justify-center">
       {isPopupEditdetail?.isOpen === true &&

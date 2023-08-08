@@ -28,7 +28,6 @@ const UserProfile = () => {
   const disableStyle = {
     backgroundCcolor: "slate",
   };
-  console.log(avt);
   return (
     <div className="flex flex-col h-screen">
       <Header title="Your Profile" />

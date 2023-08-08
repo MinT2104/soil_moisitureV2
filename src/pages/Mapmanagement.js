@@ -34,34 +34,27 @@ export const Mapmanagement = () => {
 
   //----------------date filter------------------
 
-  const filterDateTime = useMemo(() => {
-    return FilterForChart(
-      dayObjectChosen,
-      initialIndex,
-      currentProject,
-      allSenSorValue
-    );
-  }, [dayObjectChosen, initialIndex]);
+  // const filterDateTime = useMemo(() => {
+  //   return FilterForChart(
+  //     dayObjectChosen,
+  //     initialIndex,
+  //     currentProject,
+  //     allSenSorValue
+  //   );
+  // }, [dayObjectChosen, initialIndex]);
 
-  const {
-    initialValueCreated,
-    initialValueField1,
-    initialValueField2,
-    filteredObjectCreated,
-    filteredObjectField1,
-    filteredObjectField2,
-    valueCreate,
-    valueField1,
-    valueField2,
-  } = filterDateTime;
+  // const {
+  //   initialValueCreated,
+  //   initialValueField1,
+  //   initialValueField2,
+  //   filteredObjectCreated,
+  //   filteredObjectField1,
+  //   filteredObjectField2,
+  //   valueCreate,
+  //   valueField1,
+  //   valueField2,
+  // } = filterDateTime;
   //----------------------------------------------
-
-  useEffect(() => {
-    setInitialIndex({
-      indexEnd: allSenSorValue.length - 1,
-      indexStart: allSenSorValue.length - 40,
-    });
-  }, [allSenSorValue]);
 
   return (
     <DefaultLayout title={"Map Management"}>
@@ -82,17 +75,7 @@ export const Mapmanagement = () => {
               >
                 <RefreshIcon sx={{ fontSize: 30 }} />
               </div>
-              <Chart
-                initialValueCreated={initialValueCreated}
-                initialValueField2={initialValueField2}
-                initialValueField1={initialValueField1}
-                filteredObjectCreated={filteredObjectCreated}
-                valueCreate={valueCreate}
-                valueField1={valueField1}
-                valueField2={valueField2}
-                filteredObjectField1={filteredObjectField1}
-                filteredObjectField2={filteredObjectField2}
-              />
+              <Chart />
             </div>
           </div>
           <div className="mt-5 dark:bg-[#2a213a] bg-white dark:text-white shadow-xl animate-opacity h-fit w-4/5 md:block hidden">

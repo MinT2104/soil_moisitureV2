@@ -34,7 +34,7 @@ export default function DatePickerValue() {
     setAllRain,
     allRain,
   } = useContext(AppContext);
-  const [monthOrYear, setMonthOrYear] = useState("");
+  const [monthOrYear, setMonthOrYear] = useState(dayjs(new Date()));
   const [intervalDay, setInterValDay] = useState({
     start: dayjs(new Date()),
     end: dayjs(new Date()),
@@ -43,10 +43,9 @@ export default function DatePickerValue() {
   //---------------------------filter-------------------------
   const handleGetFilterDay = async () => {
     const days = {
-      type: "interval",
       pid: currentProject?.pid,
-      start: intervalDay.start.$d,
-      end: intervalDay.end.$d,
+      start: moment(intervalDay.start.$d).startOf("date"),
+      end: moment(intervalDay.end.$d).endOf("date"),
     };
     // setDayObjectChosen(days);
     if (filterState?.by === "interval" && filterState?.for === "both") {
@@ -56,8 +55,6 @@ export default function DatePickerValue() {
       setAllRain(rain.data);
     }
     if (filterState?.by === "interval" && filterState?.for === "rainfall") {
-      // const esp = await apiProjectService.post("/esp_sensor/feed.json", days);
-      // setAllSenSorValue(esp.data);
       const rain = await apiProjectService.post("/rain/feed.json", days);
       setAllRain(rain.data);
     }
@@ -68,12 +65,10 @@ export default function DatePickerValue() {
   };
   const handleGetMonth = async () => {
     const days = {
-      type: "month",
       pid: currentProject?.pid,
-      day: monthOrYear.$d,
+      start: moment(monthOrYear.$d).startOf("month"),
+      end: moment(monthOrYear.$d).endOf("month"),
     };
-    // setDayObjectChosen(days);
-
     const esp = await apiProjectService.post("/esp_sensor/feed.json", days);
     setAllSenSorValue(esp.data);
     const rain = await apiProjectService.post("/rain/feed.json", days);
@@ -81,9 +76,9 @@ export default function DatePickerValue() {
   };
   const handleGetYear = async () => {
     const days = {
-      type: "year",
       pid: currentProject?.pid,
-      day: monthOrYear.$d,
+      start: moment(monthOrYear.$d).startOf("year"),
+      end: moment(monthOrYear.$d).endOf("year"),
     };
     const esp = await apiProjectService.post("/esp_sensor/feed.json", days);
     setAllSenSorValue(esp.data);
@@ -92,9 +87,9 @@ export default function DatePickerValue() {
   };
   const handleGetDate = async () => {
     const days = {
-      type: "day",
       pid: currentProject?.pid,
-      day: monthOrYear.$d,
+      start: moment(monthOrYear.$d).startOf("date"),
+      end: moment(monthOrYear.$d).endOf("date"),
     };
     // setDayObjectChosen(days);
     const esp = await apiProjectService.post("/esp_sensor/feed.json", days);
@@ -109,72 +104,81 @@ export default function DatePickerValue() {
     setIsDropDown(!isDropDown);
   };
   //-----------------------initial--------------------------------
-  useLayoutEffect(() => {
+  useEffect(() => {
+    const abortCtrl = new AbortController();
     window.addEventListener("load", () => {
       dispatch(filterby({ by: "day", for: "both" }));
     });
     const getFirstData = async () => {
       const days = {
-        type: "day",
         pid: currentProject?.pid,
-        day: new Date(),
+        start: moment(new Date()).startOf("date"),
+        end: moment(new Date()).endOf("date"),
       };
-      // setDayObjectChosen(days);
       const esp = await apiProjectService.post("/esp_sensor/feed.json", days);
       setAllSenSorValue(esp.data);
       const rain = await apiProjectService.post("/rain/feed.json", days);
       setAllRain(rain.data);
-      const projectRain = await apiProjectService.post("/rain/feed.json", {
-        type: "all",
+    };
+    getFirstData();
+
+    return () => {
+      abortCtrl.abort();
+    };
+  }, [currentProject]);
+  useEffect(() => {
+    const abortCtrl = new AbortController();
+    const getFirstDATA = async () => {
+      const projectRain = await apiProjectService.post("/rain/getallfeed", {
         pid: currentProject?.pid,
       });
       setProjectRain(projectRain.data);
     };
-    getFirstData();
+    getFirstDATA();
+    return () => {
+      abortCtrl.abort();
+    };
   }, [currentProject]);
+
   useClickOutside(dropDownRef, setIsDropDown);
   //------------------find missing data---------------------------
-  function findMissingDates(dateArray) {
-    const missingDates = [];
-    const startDate = new Date(dateArray[0]);
-    const endDate = new Date();
+  // function findMissingDates(dateArray) {
+  //   const missingDates = [];
+  //   const startDate = new Date(dateArray[0]);
+  //   const endDate = new Date();
 
-    for (
-      let date = startDate;
-      date <= endDate;
-      date.setDate(date.getDate() + 1)
-    ) {
-      const dateString = moment(date).format("DD/MM/YYYY");
-      if (
-        !dateArray.some(
-          (date) => moment(date).format("DD/MM/YYYY") === dateString
-        )
-      ) {
-        missingDates.push(new Date(date));
-      }
-    }
+  //   for (
+  //     let date = startDate;
+  //     date <= endDate;
+  //     date.setDate(date.getDate() + 1)
+  //   ) {
+  //     const dateString = moment(date).format("DD/MM/YYYY");
+  //     if (
+  //       !dateArray.some(
+  //         (date) => moment(date).format("DD/MM/YYYY") === dateString
+  //       )
+  //     ) {
+  //       missingDates.push(new Date(date));
+  //     }
+  //   }
 
-    return missingDates;
-  }
+  //   return missingDates;
+  // }
+  // console.log(projectRain);
 
-  const sortData = projectRain
-    ?.sort((a, b) => moment(a.generated_date) - moment(b.generated_date))
-    .map((data) => moment(data.generated_date));
-  const missingDatesArray = findMissingDates(
-    (filterState.by === "interval" && filterState?.for === "both") ||
-      (filterState.by === "interval" && filterState?.for === "rainfall")
-      ? projectRain?.map((data) => new Date(data?.generated_date))
-      : []
-  );
-  console.log(sortData);
-  console.log(missingDatesArray);
+  // const missingDatesArray = findMissingDates(
+  //   (filterState.by === "interval" && filterState?.for === "both") ||
+  //     (filterState.by === "interval" && filterState?.for === "rainfall")
+  //     ? projectRain?.map((data) => new Date(data?.generated_date))
+  //     : []
+  // );
 
-  function shouldDisableDate(date) {
-    return missingDatesArray.some(
-      (disabledDate) =>
-        new Date(date).toDateString() === new Date(disabledDate).toDateString()
-    );
-  }
+  // function shouldDisableDate(date) {
+  //   return missingDatesArray.some(
+  //     (disabledDate) =>
+  //       new Date(date).toDateString() === new Date(disabledDate).toDateString()
+  //   );
+  // }
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -301,8 +305,8 @@ export default function DatePickerValue() {
               <div className=" md:flex-row flex items-center justify-right gap-2 md:gap-5">
                 <div className=" text-black rounded animate-opacity">
                   <DatePicker
+                    key={1}
                     disableFuture
-                    shouldDisableDate={shouldDisableDate}
                     label="Pick a day"
                     value={monthOrYear}
                     onChange={(newValue) => setMonthOrYear(newValue)}
@@ -324,8 +328,8 @@ export default function DatePickerValue() {
               <div className=" md:flex-row flex items-center justify-right gap-2 md:gap-5">
                 <div className=" text-black rounded animate-opacity">
                   <DatePicker
+                    key={2}
                     disableFuture
-                    shouldDisableDate={shouldDisableDate}
                     label="Pick a month"
                     value={monthOrYear}
                     views={["month", "year"]}
@@ -348,9 +352,9 @@ export default function DatePickerValue() {
               <div className=" md:flex-row flex items-center justify-right gap-2 md:gap-5">
                 <div className=" text-black rounded animate-opacity">
                   <DatePicker
+                    key={3}
                     disableFuture
                     label="Pick a year"
-                    shouldDisableDate={shouldDisableDate}
                     value={monthOrYear}
                     views={["year"]}
                     onChange={(newValue) => setMonthOrYear(newValue)}
@@ -372,8 +376,8 @@ export default function DatePickerValue() {
               <div className=" md:flex-row flex items-center justify-right gap-2 md:gap-5">
                 <div className=" text-black rounded animate-opacity">
                   <DatePicker
+                    key={4}
                     disableFuture
-                    shouldDisableDate={shouldDisableDate}
                     label="Start"
                     value={intervalDay?.start}
                     onChange={(newValue) =>
@@ -384,9 +388,9 @@ export default function DatePickerValue() {
 
                 <div className=" text-black rounded animate-opacity">
                   <DatePicker
+                    key={5}
                     disableFuture
                     label="End"
-                    shouldDisableDate={shouldDisableDate}
                     value={intervalDay?.end}
                     onChange={(newValue) =>
                       setInterValDay({ ...intervalDay, end: newValue })
@@ -404,16 +408,6 @@ export default function DatePickerValue() {
               </div>
             </div>
           )}
-          {/* {filterState === "all" && (
-            <div className="dark:text-white dark:bg-[#2a213a] gap-2 md:gap-5 w-fit p-2">
-              <button
-                onClick={handleGetAllDays}
-                className="text-white font-semibold p-4 w-fit rounded color-Primary"
-              >
-                Get All
-              </button>
-            </div>
-          )} */}
         </div>
       </div>
 

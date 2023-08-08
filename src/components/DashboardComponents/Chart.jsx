@@ -47,8 +47,7 @@ const Chart = (
     // initialValueCreated,
   }
 ) => {
-  const { dayObjectChosen, currentProject, allSenSorValue } =
-    useContext(AppContext);
+  const { currentProject, allSenSorValue } = useContext(AppContext);
   const w = window.innerWidth;
   const { field1, field2, date } = useMemo(() => {
     return formatDataForChart(currentProject, allSenSorValue);
