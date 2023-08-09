@@ -15,7 +15,7 @@ const Volt = ({ number, data }) => {
         <div className="text-black dark:text-white flex flex-col">
           <span className="  font-bold text-[14px]">Volt {number}</span>
           <span className="  font-light text-[10px]">
-            {`${data}mmV` || <span className="text-red-500">_ _</span>}
+            {data ? `${data}mmV` : <span className="text-red-500">_ _</span>}
           </span>
         </div>
       </div>
