@@ -322,7 +322,7 @@ const DashBoard = () => {
                 </span>
                 <span>Project Detail</span>
               </div>
-              <table className="lg:block hidden min-w-full divide-y divide-white-200 bg-white dark:divide-gray-700 overflow-x-auto">
+              <table className="lg:table hidden min-w-full divide-y divide-white-200 bg-white dark:divide-gray-700">
                 <thead className="animate-opacity text-black border-b-[1px] border-slate-300">
                   <tr className="font-light text-left">
                     <th className="px-6 py-3 text-center text-xs font-medium uppercase" />
@@ -352,7 +352,7 @@ const DashBoard = () => {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="animate-opacity overflow-auto">
+                <tbody className="animate-opacity">
                   {currentProject?.projectName === undefined ? (
                     <tr>
                       <td
@@ -430,7 +430,7 @@ const DashBoard = () => {
                   )}
                 </tbody>
               </table>
-              <div className="bg-white p-2">
+              <div className="bg-white p-2 lg:hidden block">
                 <TableData />
               </div>
             </section>
