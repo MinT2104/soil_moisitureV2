@@ -160,10 +160,16 @@ const Header = (props) => {
       ?.firstChild?.removeAttribute("fill");
   }
   const handelOpenDarkMode = () => {
-    localStorage.setItem("dark", "true");
-    setDark("true");
-    // document.getElementsByTagName("html")
-    document.getElementsByTagName("html")[0].classList?.add("dark");
+    // localStorage.setItem("dark", "true");
+    // setDark("true");
+    // // document.getElementsByTagName("html")
+    // document.getElementsByTagName("html")[0].classList?.add("dark");
+    toast.error("Dark mode is not available", {
+      backgroundColor: "#8329C5",
+      color: "#ffffff",
+      position: "top-right",
+      delay: 2000,
+    });
   };
   const handelCloseDarkMode = () => {
     localStorage.setItem("dark", "false");
@@ -177,6 +183,27 @@ const Header = (props) => {
   };
 
   useClickOutside(dropDownRef, setIsPopupUser);
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === "/") {
+      document.title = "Overview - IOT Watering Management Engineering";
+    }
+    if (path === "/management") {
+      document.title =
+        "Project Management - IOT Watering Management Engineering";
+    }
+    if (path === "/mapmanagement") {
+      document.title = "Map Management - IOT Watering Management Engineering";
+    }
+    if (path === "/rainfall") {
+      document.title =
+        "Rainfall Management - IOT Watering Management Engineering";
+    }
+    if (path === "/notifications") {
+      document.title = "Notification - IOT Watering Management Engineering";
+    }
+  }, []);
 
   return (
     <div className="relative animate-cancel  dark:bg-[#2a213a] dark:text-white shadow-xl px-2 md:px-10 md:pl-6 w-full h-[60px] py-4 bg-white flex justify-between items-center text-black font-bold">

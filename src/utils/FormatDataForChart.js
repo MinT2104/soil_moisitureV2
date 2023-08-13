@@ -13,7 +13,7 @@ export const formatDataForChart = (currentProject, allSenSorValue) => {
     ).toFixed(0)
   );
   const date = allSenSorValue?.map((data) =>
-    moment(data?.created_at).format("DD/MM/YYYY mm:hh a")
+    moment(data?.created_at).format("DD/MM/YYYY hh:mm a")
   );
   return { field1, field2, date };
 };

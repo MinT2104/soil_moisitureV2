@@ -33,7 +33,7 @@ export const TableData = ({ loadTable, setloadTable, data }) => {
         </tr>
         <tr className="w-full even:bg-slate-200 even:dark:text-black">
           <td className="p-2 px-4 text-left w-1/2 font-semibold text-sm">
-            Date generated
+            Install date
           </td>
           <td className="border-l-[1px] border-slate-300 p-2 px-4 text-left w-1/2 font-light text-sm">
             {moment(data?.created_at || currentProject?.created_at).format(

@@ -113,11 +113,6 @@ const NavBar = ({ setIsChooseMapPopup }) => {
             {moment(Date()).format("DD")}
           </span>
         </div>
-        {/* <div className='w-full h-1/3 bg-white rounded flex items-center justify-center'>
-                    <span className='text-[12px] font-extralight text-orange-600'>
-                    {time}
-                    </span>
-                </div> */}
       </div>
     </div>
   );

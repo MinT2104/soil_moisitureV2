@@ -7,7 +7,7 @@ import { useContext } from "react";
 
 const Volt = ({ number, data }) => {
   return (
-    <div className="w-1/6 dark:bg-[#2a213a] rounded h-fit justify-center md:bg-gray-200 bg-white flex items-center p-2">
+    <div className="w-full lg:w-1/6 dark:bg-[#2a213a] rounded h-fit justify-center md:bg-gray-200 bg-white flex items-center p-2">
       <div className="flex flex-row items-center w-full justify-center gap-4">
         <div className="text-yellow-500 h-fit bg-gray-300 p-1 rounded-full">
           <ElectricMeterIcon sx={{ fontSize: 30 }} />

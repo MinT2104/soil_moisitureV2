@@ -18,6 +18,7 @@ import { ActionToListProject } from "../components/CreateProjectComponents/Actio
 import { ActionToListProjectMob } from "../components/CreateProjectComponents/ActionToListProjectMob";
 import { Edit } from "../components/CreateProjectComponents/Edit";
 import { DefaultLayout } from "../layouts/DefaultLayout";
+import moment from "moment";
 
 const ProjectManagement = () => {
   const {
@@ -72,7 +73,7 @@ const ProjectManagement = () => {
             const newProject = {
               pid: v4(),
               type: projectChose,
-              created_at: Date(),
+              created_at: moment(new Date()),
               projectName: projectName,
               humidLevel: 50,
               manualWatering: false,

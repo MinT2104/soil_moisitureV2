@@ -134,9 +134,9 @@ const DashBoard = () => {
   }, [currentProject]);
   useEffect(() => {
     setIsOpenSideBar(true);
-
     return setIsOpenSideBar(false);
   }, []);
+
   const handleMapPopup = () => {
     setIsChooseMapPopup(true);
     setIsPopupProjectManagementMob(false);
@@ -163,7 +163,7 @@ const DashBoard = () => {
           isProjectConversion={isProjectconversion}
         />
       )}
-      {isOpenSideBar && <MobBar setIsOpenSideBar />}
+      {isOpenSideBar && <MobBar />}
       {isOpenChart && (
         <section className=" animate-opacity bg-white z-40 absolute w-full h-[calc(100%-60px)] top-[60px] dark:bg-[#2a213a] ">
           <div
@@ -197,7 +197,7 @@ const DashBoard = () => {
         </div>
       )}
       {isPopupProjectManagementMob && (
-        <div className="dark:text-black shadow-xl animate-opacity absolute top-0 left-0 w-full h-screen z-50 flex items-center justify-center">
+        <div className="dark:text-black shadow-xl animate-opacity fixed top-0 left-0 w-full h-screen z-50 flex items-center justify-center">
           <div
             onClick={() => setIsPopupProjectManagementMob(false)}
             className="absolute top-0 left-0 w-full bg-black opacity-80 h-screen z-[0] "
@@ -220,14 +220,7 @@ const DashBoard = () => {
               >
                 <LoopIcon /> <span>Project Conversion</span>
               </li>
-
               {/* <li
-                  onClick={handleMapPopup}
-                  className="dark:hover:bg-blue-500 px-4 py-4 font-light hover:bg-slate-200 duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-2 items-center"
-                >
-                  <MapIcon /> <span>Map Management</span>
-                </li> */}
-              <li
                 onClick={() => {
                   setIsOpenChart(true);
                   setIsPopupProjectManagementMob(false);
@@ -235,21 +228,21 @@ const DashBoard = () => {
                 className="dark:hover:bg-blue-500 px-4 py-4 font-light hover:bg-slate-200 duration-300 cursor-pointer border-b-[0.5px] border-slate-200 flex gap-2 items-center"
               >
                 <LineAxisOutlinedIcon /> <span>Open Chart</span>
-              </li>
+              </li> */}
             </ul>
           </div>
         </div>
       )}
 
-      <div className="scrollbar relative w-full flex flex-row rounded bg-white md:flex-nowrap flex-wrap h-full">
+      <div className="scrollbar relative w-full flex flex-row rounded bg-white md:flex-nowrap flex-wrap h-fit md:h-full">
         <div className="scrollbar animate-slideInToLeft md:animate-opacity dark:bg-slate-900 flex lg:flex-row w-full h-fit gap-1 p-1 overflow-auto createBg ">
           <div className="scrollbar scrollbarDivHome flex flex-col gap-1 w-full h-full">
             <ProjectMangagementMob
               currentProject={currentProject}
               setIsPopupProjectManagementMob={setIsPopupProjectManagementMob}
             />
-            <div className="shadow-xl w-full flex h-20 lg:flex-row gap-1 flex-col">
-              <div className="w-1/2 p-2  px-4 flex justify-start gap-4 bg-white items-center text-black rounded">
+            <div className="shadow-xl w-full flex h-fit lg:h-20 lg:flex-row gap-1 flex-col">
+              <div className="lg:flex hidden w-full lg:w-1/2 p-2  px-4  justify-start gap-4 bg-white items-center text-black rounded">
                 <div
                   onClick={() => setIsProjectConversion(true)}
                   className=" cursor-pointer px-4 p-2 rounded border-[1px] border-black flex gap-2 items-center"
@@ -259,7 +252,7 @@ const DashBoard = () => {
                 </div>
                 <span className=" dark:text-white font-bold text-[30px] flex items-center break-all text-blue-500">
                   {currentProject?.projectName || (
-                    <span className="text-xl font-bold">
+                    <span className="text-sm md:text-xl font-bold">
                       Please choose project
                     </span>
                   )}
@@ -273,7 +266,7 @@ const DashBoard = () => {
             <DatePickerValue />
 
             <section className="flex gap-1 flex-wrap lg:flex-nowrap">
-              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
+              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full">
                 <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
                   <div
                     onClick={() => setReFreshChart(!reFreshChart)}
@@ -284,11 +277,11 @@ const DashBoard = () => {
                   <Chart />
                 </div>
               </div>
-              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full md:block hidden">
+              <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full">
                 <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
                   <div
                     onClick={() => setReFreshChart(!reFreshChart)}
-                    className="cursor-pointer absolute top-2 right-2  z-50 p-1 color-Primary rounded text-white"
+                    className="cursor-pointer absolute top-2 right-2  z-40 p-1 color-Primary rounded text-white"
                   >
                     <RefreshIcon sx={{ fontSize: 30 }} />
                   </div>
@@ -296,7 +289,7 @@ const DashBoard = () => {
                 </div>
               </div>
             </section>
-            <div className="shadow-xl w-full flex h-28 lg:flex-row gap-1 flex-col">
+            <div className="shadow-xl w-full flex h-fit lg:h-28 lg:flex-row gap-1 flex-col">
               <div className="flex flex-row w-full lg:w-1/2 gap-1">
                 <MinMax name="Max Value 1" value={max1} />
                 <MinMax name="Min Value 1" value={min1} />
@@ -310,7 +303,7 @@ const DashBoard = () => {
                 <MinMax name="Last Value 2" value={lastValue2} />
               </div>
             </div>
-            <div className="flex w-full lex-wrap gap-1 bg-white rounded h-fit p-2">
+            <div className="flex w-full flex-wrap lg:flex-nowrap gap-1 lg:bg-white rounded h-fit lg:p-2">
               <Volt number={1} data={field1[field1?.length - 1]} />
               <Volt number={2} data={field2[field2?.length - 1]} />
               <HumidPercentage number={1} data={field1[field1?.length - 1]} />
@@ -329,7 +322,7 @@ const DashBoard = () => {
                 </span>
                 <span>Project Detail</span>
               </div>
-              <table className=" min-w-full divide-y divide-white-200 bg-white dark:divide-gray-700">
+              <table className="lg:block hidden min-w-full divide-y divide-white-200 bg-white dark:divide-gray-700 overflow-x-auto">
                 <thead className="animate-opacity text-black border-b-[1px] border-slate-300">
                   <tr className="font-light text-left">
                     <th className="px-6 py-3 text-center text-xs font-medium uppercase" />
@@ -437,39 +430,11 @@ const DashBoard = () => {
                   )}
                 </tbody>
               </table>
+              <div className="bg-white p-2">
+                <TableData />
+              </div>
             </section>
           </div>
-          {/* <div className="relative md:block hidden shadow-xl h-full w-full md:w-1/5 md:mb-0 mb-10 bg-white rounded dark:bg-[#2a213a] dark:text-white">
-            <div className="absolute bottom-0 color-Primary text-white w-full h-fit p-4 font-bold z-40 flex items-center justify-center">
-              <CSVLink data={dataCSV} filename={currentProject?.projectName}>
-                Export
-              </CSVLink>
-            </div>
-            <div
-              onClick={() => setIsProjectConversion(true)}
-              className="p-2 cursor-pointer px-4 flex justify-start gap-4 items-center color-Primary text-white"
-            >
-              <LoopIcon sx={{ fontSize: 35 }} />
-              <span className=" dark:text-white font-bold text-[30px] flex items-center break-all">
-                {currentProject?.projectName || (
-                  <span className="text-xl font-bold">
-                    Please choose project
-                  </span>
-                )}
-              </span>
-            </div>
-            <ul className="relative dark:bg-[#2a213a] dark:text-white">
-              {isProjectconversion && (
-                <ProjectConversion
-                  setIsProjectConversion={setIsProjectConversion}
-                  setCurrentProject={setCurrentProject}
-                  allProjects={allProjects}
-                  isProjectConversion={isProjectconversion}
-                />
-              )}
-              <TableData setloadTable={setloadTable} loadTable={loadTable} />
-            </ul>
-          </div> */}
         </div>
       </div>
     </DefaultLayout>

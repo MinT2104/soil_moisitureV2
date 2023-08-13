@@ -9,11 +9,10 @@ import { useNavigate } from "react-router-dom";
 // import { UserAuth } from "../../context/AuthContext";
 import { AppContext } from "../../context/AppContext";
 import WaterIcon from "@mui/icons-material/Water";
+import MapIcon from "@mui/icons-material/Map";
 
 const MobBar = () => {
   const navigate = useNavigate();
-  const { allProjects, setCurrentProject, isOpenSideBar } =
-    useContext(AppContext);
   const [getPath, setGetPath] = useState("Home");
   const [pathActive, setPathActive] = useState(getPath);
   const [w, setW] = useState("");
@@ -29,7 +28,7 @@ const MobBar = () => {
   }, []);
   return (
     <div
-      className={`md:hidden block z-50 absolute w-full h-full animate-slideIn top-[60px] dark:bg-[#2a213a] bg-slate-200`}
+      className={`md:hidden block z-50 fixed w-full h-full animate-slideIn top-[60px] dark:bg-[#2a213a] bg-slate-200`}
     >
       <div className=" flex flex-col gap-1 justify-start items-center my-2 mt-1">
         <Link
@@ -64,7 +63,22 @@ const MobBar = () => {
           <AddBoxIcon sx={{ fontSize: 30 }} />
           <h1 className="text-lg">Project Management</h1>
         </Link>
-
+        <Link
+          onClick={() => {
+            handleNavigate("mapmanagement");
+          }}
+          to="/mapmanagement"
+          className={`
+                ${
+                  pathActive === "/mapmanagement"
+                    ? "color-Primary text-white"
+                    : "text-black bg-white"
+                }
+               w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300`}
+        >
+          <MapIcon sx={{ fontSize: 25 }} />
+          <h1 className="text-lg">Map Management</h1>
+        </Link>
         <Link
           onClick={() => {
             handleNavigate("rainfall");
@@ -79,7 +93,7 @@ const MobBar = () => {
                 w-full dark:bg-transparent dark:text-white outline-none font-normal flex items-bottom gap-4 hover:color-Primary hover:text-white rounded p-4 hover:translate-x-1 duration-300 `}
         >
           <WaterIcon sx={{ fontSize: 25 }} />
-          <h1 className="text-lg">Rainfall Management</h1>
+          <h1 className="text-lg">Rainfall Station</h1>
         </Link>
         <Link
           onClick={() => {

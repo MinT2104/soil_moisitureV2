@@ -150,8 +150,8 @@ const RainFallChart = ({}) => {
   //------------------------
 
   return (
-    <div className="z-40 relative bg-white dark:bg-[#2a213a]">
-      <Bar height={w < 768 ? 600 : 140} options={options} data={data} />
+    <div className="z-30 relative bg-white dark:bg-[#2a213a]">
+      <Bar height={140} options={options} data={data} />
     </div>
   );
 };

@@ -183,8 +183,8 @@ export default function DatePickerValue() {
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <div className="dark:bg-[#2a213a] dark:text-white flex flex-col bg-white rounded">
-        <div className=" md:flex-row flex items-center md:items-center flex-col justify-between md:gap-5">
-          <div className="flex items-center">
+        <div className=" md:flex-row flex items-center md:items-center flex-col justify-between gap-2 lg:gap-5">
+          <div className="flex items-center flex-col lg:flex-row">
             <div
               ref={dropDownRef}
               className="relative w-fit  p-4 flex items-center gap-4"

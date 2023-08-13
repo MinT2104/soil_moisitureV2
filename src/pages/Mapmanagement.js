@@ -32,30 +32,10 @@ export const Mapmanagement = () => {
   const [initialIndex, setInitialIndex] = useState({});
   const [viewport, setViewport] = useState(initialViewPort);
 
-  //----------------date filter------------------
-
-  // const filterDateTime = useMemo(() => {
-  //   return FilterForChart(
-  //     dayObjectChosen,
-  //     initialIndex,
-  //     currentProject,
-  //     allSenSorValue
-  //   );
-  // }, [dayObjectChosen, initialIndex]);
-
-  // const {
-  //   initialValueCreated,
-  //   initialValueField1,
-  //   initialValueField2,
-  //   filteredObjectCreated,
-  //   filteredObjectField1,
-  //   filteredObjectField2,
-  //   valueCreate,
-  //   valueField1,
-  //   valueField2,
-  // } = filterDateTime;
-  //----------------------------------------------
-
+  useEffect(() => {
+    setIsOpenSideBar(true);
+    return setIsOpenSideBar(false);
+  }, []);
   return (
     <DefaultLayout title={"Map Management"}>
       {isOpenChart && (

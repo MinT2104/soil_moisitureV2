@@ -146,7 +146,7 @@ const Chart = (
   //------------------------
   return (
     <div className="z-30 relative bg-white dark:bg-[#2a213a]">
-      <Line height={w < 768 ? 300 : 140} options={options} data={data} />
+      <Line height={140} options={options} data={data} />
     </div>
   );
 };
