@@ -155,7 +155,7 @@ const ButtonControl = ({ setloadTable, loadTable }) => {
       {isDisable && (
         <div
           onClick={handleAlert}
-          className="absolute z-40 bg-gray-400 opacity-40 rounded w-full h-full top-0 left-0"
+          className="absolute z-30 bg-gray-400 opacity-40 rounded w-full h-full top-0 left-0"
         ></div>
       )}
 

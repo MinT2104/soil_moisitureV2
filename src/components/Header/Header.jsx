@@ -215,7 +215,7 @@ const Header = (props) => {
           <ArrowBackIcon /> <span>Back</span>
         </div>
       ) : (
-        <div className="flex gap-10 items-center w-1/3">
+        <div className="flex gap-10 items-center w-fit">
           {!props.isOpenSideBar ? (
             <div className="md:hidden block" onClick={handleOpenSideBar}>
               <MenuIcon sx={{ fontSize: 30 }} />
@@ -238,9 +238,9 @@ const Header = (props) => {
               <img src={logo} className="h-5" alt="" />
             </div>
           </div>
-          <div className="md:flex hidden flex-col">
+          <div className="md:flex hidden flex-col w-fit">
             <span className="text-[14px] md:text-[16px]">{props?.title}</span>
-            <span className="font-light text-[10px] md:text-sm">
+            <span className="font-light text-[10px] md:text-sm w-fit inline-block">
               Welcome back {userRedux.user?.displayName}!
             </span>
           </div>
@@ -249,7 +249,7 @@ const Header = (props) => {
 
       <div className="md:hidden flex flex-col w-full items-center justify-center">
         <span className="text-[14px] md:text-[16px]">{props?.title}</span>
-        <span className="font-light text-[10px] md:text-sm">
+        <span className="font-light text-[10px] md:text-sm w-fit inline-block">
           Welcome back {userRedux.user?.displayName}!
         </span>
       </div>

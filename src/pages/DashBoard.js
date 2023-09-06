@@ -37,6 +37,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import { formatDataForChart } from "../utils/FormatDataForChart";
 import { OtherValue } from "../utils/OtherValue";
 import apiProjectService from "../services/ApiProjectService";
+import ZoomOutMapIcon from "@mui/icons-material/ZoomOutMap";
+import MoistureChartPopup from "../components/Chart/MoistureChartPopup";
 
 const DashBoard = () => {
   const {
@@ -165,22 +167,15 @@ const DashBoard = () => {
       )}
       {isOpenSideBar && <MobBar />}
       {isOpenChart && (
-        <section className=" animate-opacity bg-white z-40 absolute w-full h-[calc(100%-60px)] top-[60px] dark:bg-[#2a213a] ">
+        <section className=" animate-opacity  bg-white z-40 absolute w-full h-[calc(100%-60px)] top-[60px] dark:bg-[#2a213a] ">
           <div
             onClick={() => setIsOpenChart(false)}
             className="flex items-center gap-2 text-blue-600 bg-blue-200 w-fit m-4 mb-0 p-2 rounded hover:bg-slate-100 cursor-pointer"
           >
             <ArrowBackIcon /> <span>Back</span>
           </div>
-          <div className=" dark:bg-[#2a213a] dark:text-white scrollbar pt-2 w-full  h-fit bg-white rounded px-4">
-            <Chart
-            // filteredObjectCreated={filteredObjectCreated}
-            // valueCreate={valueCreate}
-            // valueField1={valueField1}
-            // valueField2={valueField2}
-            // filteredObjectField1={filteredObjectField1}
-            // filteredObjectField2={filteredObjectField1}
-            />
+          <div className=" dark:bg-[#2a213a] dark:text-white scrollbar w-full px-20  h-fit bg-white rounded">
+            <MoistureChartPopup />
           </div>
         </section>
       )}
@@ -202,7 +197,7 @@ const DashBoard = () => {
             onClick={() => setIsPopupProjectManagementMob(false)}
             className="absolute top-0 left-0 w-full bg-black opacity-80 h-screen z-[0] "
           ></div>
-          <div className="z-50 w-4/5 bg-white h-1/2 rounded-xl truncate flex flex-col justfy-between items-center">
+          <div className="z-50 w-2/5 bg-white h-1/2 rounded-xl truncate flex flex-col justfy-between items-center overflow-auto">
             <ul className="w-full relative dark:bg-[#2a213a] dark:text-white">
               {isProjectconversion && (
                 <ProjectConversion
@@ -268,28 +263,34 @@ const DashBoard = () => {
             <section className="flex gap-1 flex-wrap lg:flex-nowrap">
               <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full">
                 <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
+                  <Chart />
                   <div
                     onClick={() => setReFreshChart(!reFreshChart)}
-                    className="cursor-pointer absolute top-2 right-2  z-40 p-1 color-Primary rounded text-white"
+                    className="cursor-pointer absolute top-2 right-2  z-30 p-1 color-Primary rounded text-white"
                   >
                     <RefreshIcon sx={{ fontSize: 30 }} />
                   </div>
-                  <Chart />
+                  <div
+                    onClick={() => setIsOpenChart(!isOpenChart)}
+                    className="cursor-pointer absolute top-2 right-14  z-30 p-1 color-Primary rounded text-white"
+                  >
+                    <ZoomOutMapIcon sx={{ fontSize: 30 }} />
+                  </div>
                 </div>
               </div>
               <div className="dark:bg-[#2a213a] dark:text-white shadow-xl animate-opacity w-full">
                 <div className=" dark:bg-[#2a213a] relative dark:text-white scrollbar pt-6 w-full  h-fit bg-white rounded px-4">
+                  <RainFallChart />
                   <div
                     onClick={() => setReFreshChart(!reFreshChart)}
-                    className="cursor-pointer absolute top-2 right-2  z-40 p-1 color-Primary rounded text-white"
+                    className="cursor-pointer absolute top-2 right-2  z-30 p-1 color-Primary rounded text-white"
                   >
                     <RefreshIcon sx={{ fontSize: 30 }} />
                   </div>
-                  <RainFallChart />
                 </div>
               </div>
             </section>
-            <div className="shadow-xl w-full flex h-fit lg:h-28 lg:flex-row gap-1 flex-col">
+            <div className="shadow-xl w-full flex h-fit lg:h-12 lg:flex-row gap-1 flex-col">
               <div className="flex flex-row w-full lg:w-1/2 gap-1">
                 <MinMax name="Max Value 1" value={max1} />
                 <MinMax name="Min Value 1" value={min1} />

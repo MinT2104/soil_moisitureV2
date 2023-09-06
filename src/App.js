@@ -10,10 +10,9 @@ import RequiredAuth from "./requiredAuth/RequiredAuth";
 import { useSelector } from "react-redux";
 import { RainFall } from "./pages/RainFall";
 import { Mapmanagement } from "./pages/Mapmanagement";
-
+import moment from "moment";
 function App() {
   const userRedux = useSelector((state) => state);
-
   return (
     <Routes>
       <Route element={<RequiredAuth />}>

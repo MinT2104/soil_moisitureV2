@@ -37,16 +37,7 @@ ChartJS.register(
   zoomPlugin
 );
 
-const Chart = (
-  {
-    // filteredObjectCreated,
-    // filteredObjectField1,
-    // filteredObjectField2,
-    // initialValueField2,
-    // initialValueField1,
-    // initialValueCreated,
-  }
-) => {
+const Chart = ({ isOpenChart }) => {
   const { currentProject, allSenSorValue } = useContext(AppContext);
   const w = window.innerWidth;
   const { field1, field2, date } = useMemo(() => {
